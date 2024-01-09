@@ -8,7 +8,7 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 	queryFn: async () =>
 		await client.request(
 			readItems(mesh, {
-				fields: ['fecha', 'turno', 'empleado'],
+				fields: ['fecha', 'turno', { empleado: ['id', 'nombre'] }],
 				filter: {
 					fecha: {
 						_between: [startDate, endDate],
@@ -22,5 +22,5 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 			}),
 		),
 	refetchOnWindowFocus: false,
-	enabled: !!startDate,
+	enabled: !!location,
 });

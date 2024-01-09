@@ -1,4 +1,4 @@
-import { readItems, readMe } from '@directus/sdk';
+import { createItem, readItems, readMe } from '@directus/sdk';
 import { client } from './client';
 
 /**
@@ -6,7 +6,7 @@ import { client } from './client';
  * @returns
  */
 export const roleQuery = () => ({
-	queryKey: ['roleQuery'],
+	queryKey: ['role'],
 	queryFn: async () => await client.request(readMe({ fields: [{ role: ['name'] }, 'ubicacion'] })),
 	refetchOnWindowFocus: false,
 });
@@ -32,3 +32,45 @@ export const shiftQuery = () => ({
 		),
 	refetchOnWindowFocus: false,
 });
+
+/**
+ * Return employees in one store
+ * @returns
+ */
+export const employeesLocationQuery = location => ({
+	queryKey: ['employees'],
+	queryFn: async () =>
+		await client.request(
+			readItems('empleados', {
+				fields: ['nombre', 'id'],
+				sort: 'nombre',
+				filter: {
+					tienda: {
+						_eq: location,
+					},
+				},
+			}),
+		),
+	refetchOnWindowFocus: false,
+	enabled: !!location,
+});
+
+/**
+ * Create a new break
+ * @param {String} event
+ * @param {String} cc
+ * @param {String} review
+ * @returns
+ */
+export const createBreak = async (event, cc, review) =>
+	await client.request(
+		createItem(
+			'interrupciones',
+			{
+				empleado: cc,
+				evento: event,
+				...(review && { observaciones: review }),
+			},
+			{ fields: ['id'] },
+		),
+	);

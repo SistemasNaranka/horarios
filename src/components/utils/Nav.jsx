@@ -16,7 +16,7 @@ const Nav = () => {
 			<MovilNavMenu pages={pages} />
 			<DesktopNavMenu pages={pages} />
 			<Button color='success' variant='contained' sx={{ marginX: '8px' }} onClick={refetch}>
-				Refrescar
+				<p className='p-1 font-sans text-lg'>Refrescar</p>
 			</Button>
 		</nav>
 	);
