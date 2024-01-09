@@ -1,0 +1,12 @@
+.loader {
+    border-radius: 50%;
+    border: 8px solid;
+    border-color: #E4E4ED;
+    animation: s2 1s infinite linear;
+}
+
+@keyframes s2 {
+    to {
+        transform: rotate(1turn)
+    }
+}   
