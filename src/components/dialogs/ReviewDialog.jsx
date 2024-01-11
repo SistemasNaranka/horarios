@@ -7,13 +7,13 @@ import {
 	DialogTitle,
 	TextField,
 } from '@mui/material';
-import { memo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { memo } from 'react';
 import { reviewSchema } from '../../schemas/reviewSchema';
+import { createReview } from '../../clients/reg.client';
 import successAlert from '../alerts/SuccessAlert';
 import errorAlert from '../alerts/ErrorAlert';
-import { createReview } from '../../clients/reg.client';
 
 /**
  *

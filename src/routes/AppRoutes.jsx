@@ -1,9 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoutes from '../components/utils/PrivateRoutes';
-import NotMatch from '../pages/NotMatch';
-import SignIn from '../pages/SignIn';
 import { HOME_PATH } from '../utils/path';
-import Structure from '../components/utils/Structure';
+
+const NotMatch = lazy(() => import('../pages/NotMatch'));
+const SignIn = lazy(() => import('../pages/SignIn'));
+const Structure = lazy(() => import('../components/utils/Structure'));
 
 function AppRoutes() {
 	return (

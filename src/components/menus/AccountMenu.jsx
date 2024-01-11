@@ -1,7 +1,7 @@
 import { Button, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import { client } from '../../clients/client';
 
 const AccountMenu = () => {

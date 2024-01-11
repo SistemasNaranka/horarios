@@ -1,9 +1,9 @@
-import { roleStore } from '../../stores/roleStore';
-import { PAGES_ROLE } from '../../utils/path';
-import DesktopNavMenu from '../menus/DesktopNavMenu';
-import { Button } from '@mui/material';
-import MovilNavMenu from '../menus/MovilNavMenu';
 import { useQueryClient } from '@tanstack/react-query';
+import { Button } from '@mui/material';
+import DesktopNavMenu from '../menus/DesktopNavMenu';
+import { roleStore } from '../../stores/roleStore';
+import MovilNavMenu from '../menus/MovilNavMenu';
+import { PAGES_ROLE } from '../../utils/path';
 
 const Nav = () => {
 	const role = roleStore(state => state.role);

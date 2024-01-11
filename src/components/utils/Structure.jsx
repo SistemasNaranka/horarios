@@ -1,10 +1,10 @@
 import { useQueries } from '@tanstack/react-query';
-import { roleQuery, shiftQuery } from '../../clients/aux.client';
-import Loading from './Loading';
 import { useEffect } from 'react';
-import { roleStore } from '../../stores/roleStore';
-import { shiftStore } from '../../stores/shiftStore';
+import { roleQuery, shiftQuery } from '../../clients/aux.client';
 import StructureRoutes from '../../routes/StructureRoutes';
+import { shiftStore } from '../../stores/shiftStore';
+import { roleStore } from '../../stores/roleStore';
+import Loading from './Loading';
 import Header from './Header';
 
 function Structure() {

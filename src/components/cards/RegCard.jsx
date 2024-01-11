@@ -1,10 +1,10 @@
-import { Button, Paper, Tooltip, Typography } from '@mui/material';
-import { memo, useState } from 'react';
 import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
+import { Button, Paper, Tooltip, Typography } from '@mui/material';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import { memo, useState } from 'react';
+import BreakDialog from '../dialogs/BreakDialog';
 import NewsDialog from '../dialogs/NewsDialog';
 import { events } from '../../utils/constants';
-import BreakDialog from '../dialogs/BreakDialog';
 import RegButton from '../buttons/RegButton';
 
 /**

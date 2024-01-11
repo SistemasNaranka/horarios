@@ -1,6 +1,6 @@
 import { memo } from 'react';
-import TableHis from './TableHis';
 import { useShiftStore } from '../../stores/shiftsStore';
+import TableHis from './TableHis';
 
 const ShiftsTable = () => {
 	const stringShifts = useShiftStore(state => state.stringShifts);

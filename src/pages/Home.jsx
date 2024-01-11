@@ -1,13 +1,13 @@
 import { useQueries } from '@tanstack/react-query';
-import { meshRangeQuery } from '../clients/mesh.client';
 import dayjs from 'dayjs';
-import { roleStore } from '../stores/roleStore';
+import { meshRangeQuery } from '../clients/mesh.client';
+import { employeeStore } from '../stores/employeeStore';
+import { registersQuery } from '../clients/reg.client';
+import { newsQuery } from '../clients/news.client';
 import Loading from '../components/utils/Loading';
 import { shiftStore } from '../stores/shiftStore';
-import { newsQuery } from '../clients/news.client';
-import { registersQuery } from '../clients/reg.client';
-import { employeeStore } from '../stores/employeeStore';
 import RegCard from '../components/cards/RegCard';
+import { roleStore } from '../stores/roleStore';
 
 function Home() {
 	const today = dayjs();

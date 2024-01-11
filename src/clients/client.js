@@ -1,6 +1,6 @@
 import { createDirectus, rest, authentication, readItems, readMe } from '@directus/sdk';
-import { HOST_ENV } from '../utils/env';
 import { memoryStorage } from '../utils/storage';
+import { HOST_ENV } from '../utils/env';
 
 // Client with REST support and authetication, using local storage for json
 export const client = createDirectus(HOST_ENV)

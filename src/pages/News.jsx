@@ -1,10 +1,10 @@
+import { useQueries } from '@tanstack/react-query';
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import TableHis from '../components/tables/TableHis';
-import { useQueries } from '@tanstack/react-query';
 import { allNewsQuery, countNewsQuery } from '../clients/news.client';
-import Loading from '../components/utils/Loading';
 import PaginationButton from '../components/buttons/PaginationButton';
+import TableHis from '../components/tables/TableHis';
+import Loading from '../components/utils/Loading';
 import { limitPage } from '../utils/constants';
 
 const today = dayjs().format('YYYY-MM-DD');

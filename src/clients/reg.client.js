@@ -1,7 +1,6 @@
-import { createItem, deleteItems, readItems, updateItem } from '@directus/sdk';
-import dayjs from 'dayjs';
-import { client } from './client';
+import { createItem, readItems, updateItem } from '@directus/sdk';
 import { limitPage } from '../utils/constants';
+import { client } from './client';
 
 const table = 'registros';
 

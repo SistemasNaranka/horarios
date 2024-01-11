@@ -1,5 +1,5 @@
-import Nav from './Nav';
 import Sesion from './Sesion';
+import Nav from './Nav';
 
 const Header = () => {
 	return (

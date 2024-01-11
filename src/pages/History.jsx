@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
-import dayjs from 'dayjs';
-import TableHis from '../components/tables/TableHis';
-import PaginationButton from '../components/buttons/PaginationButton';
-import Loading from '../components/utils/Loading';
-import { allRegistersQuery, countRegQuery } from '../clients/reg.client';
 import { useQueries } from '@tanstack/react-query';
+import { useState } from 'react';
+import dayjs from 'dayjs';
+import { allRegistersQuery, countRegQuery } from '../clients/reg.client';
+import PaginationButton from '../components/buttons/PaginationButton';
+import TableHis from '../components/tables/TableHis';
+import Loading from '../components/utils/Loading';
 import { limitPage } from '../utils/constants';
 
 const titles = ['Nombre', 'Evento', 'Fecha', 'Hora', 'Observaciones'];

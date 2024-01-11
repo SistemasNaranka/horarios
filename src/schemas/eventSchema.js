@@ -1,5 +1,5 @@
-import dayjs from 'dayjs';
 import { object, string } from 'yup';
+import dayjs from 'dayjs';
 
 export const baseEventSchema = object().shape({
 	review: string().max(255, 'Debes usar menos de 255 carácteres'),

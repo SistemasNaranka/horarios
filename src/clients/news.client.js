@@ -1,6 +1,6 @@
 import { createItems, readItems } from '@directus/sdk';
-import { client } from './client';
 import { limitPage } from '../utils/constants';
+import { client } from './client';
 
 const table = 'novedades';
 

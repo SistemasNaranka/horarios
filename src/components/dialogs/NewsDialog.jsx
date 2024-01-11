@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import {
 	Button,
 	Dialog,
@@ -11,15 +10,16 @@ import {
 } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
-import { memo, useContext } from 'react';
-import DatePickerInput from '../inputs/DatePickerInput';
-import successAlert from '../alerts/SuccessAlert';
-import errorAlert from '../alerts/ErrorAlert';
-import SelectInput from '../inputs/SelectInput';
-import { news } from '../../utils/constants';
+import { memo } from 'react';
+import dayjs from 'dayjs';
 import { dateEventSchema } from '../../schemas/eventSchema';
 import { createListNews } from '../../clients/news.client';
+import DatePickerInput from '../inputs/DatePickerInput';
 import { roleStore } from '../../stores/roleStore';
+import successAlert from '../alerts/SuccessAlert';
+import SelectInput from '../inputs/SelectInput';
+import errorAlert from '../alerts/ErrorAlert';
+import { news } from '../../utils/constants';
 
 const today = dayjs();
 

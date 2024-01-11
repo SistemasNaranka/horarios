@@ -1,11 +1,11 @@
-import { lazy, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { roleStore } from '../stores/roleStore';
-import { employeesLocationQuery } from '../clients/aux.client';
 import { useQueries } from '@tanstack/react-query';
-import Loading from '../components/utils/Loading';
-import { employeeStore } from '../stores/employeeStore';
+import { Route, Routes } from 'react-router-dom';
+import { lazy, useEffect } from 'react';
 import { HISTORY_RELATIVE, NEWS_RELATIVE } from '../utils/path';
+import { employeesLocationQuery } from '../clients/aux.client';
+import { employeeStore } from '../stores/employeeStore';
+import Loading from '../components/utils/Loading';
+import { roleStore } from '../stores/roleStore';
 
 const NotMatch = lazy(() => import('../pages/NotMatch'));
 const Home = lazy(() => import('../pages/Home'));

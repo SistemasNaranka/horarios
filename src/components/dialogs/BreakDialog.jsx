@@ -11,12 +11,12 @@ import {
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { memo } from 'react';
-import { breaks } from '../../utils/constants';
 import { baseEventSchema } from '../../schemas/eventSchema';
-import SelectInput from '../inputs/SelectInput';
-import successAlert from '../alerts/SuccessAlert';
-import errorAlert from '../alerts/ErrorAlert';
 import { createBreak } from '../../clients/aux.client';
+import successAlert from '../alerts/SuccessAlert';
+import SelectInput from '../inputs/SelectInput';
+import { breaks } from '../../utils/constants';
+import errorAlert from '../alerts/ErrorAlert';
 
 /**
  *
