@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoutes from '../components/utils/PrivateRoutes';
 import { HOME_PATH } from '../utils/path';
+import { lazy } from 'react';
 
 const NotMatch = lazy(() => import('../pages/NotMatch'));
 const SignIn = lazy(() => import('../pages/SignIn'));
