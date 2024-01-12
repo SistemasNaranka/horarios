@@ -26,7 +26,7 @@ const RegButton = ({ disabled, handleNext, text = '', data, employee }) => {
 	const handleClickCheck = () => {
 		const time = dayjs();
 		setCurDisabled(true);
-		createRegister(text, employee.id, location)
+		createRegister({ evento: text, empleado: employee.id, tienda: location })
 			.then(res => {
 				successAlert();
 				setCurData({ hora: time.format('h:mm A'), id: res.id });

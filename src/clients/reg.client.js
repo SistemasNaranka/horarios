@@ -48,18 +48,8 @@ export const allRegistersQuery = (page, date) => ({
  * @param {String} review
  * @returns
  */
-export const createRegister = async (event, cc, location) =>
-	await client.request(
-		createItem(
-			table,
-			{
-				empleado: cc,
-				evento: event,
-				tienda: location,
-			},
-			{ fields: ['id'] },
-		),
-	);
+export const createRegister = async data =>
+	await client.request(createItem(table, data, { fields: ['id'] }));
 
 /**
  * Update a register to add a review
