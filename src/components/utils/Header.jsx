@@ -1,10 +1,10 @@
 import Sesion from './Sesion';
 import Nav from './Nav';
 
-const Header = () => {
+const Header = ({ refetch }) => {
 	return (
 		<header className='flex justify-between m-2 mb-0'>
-			<Nav />
+			<Nav refetch={refetch} />
 			<Sesion />
 		</header>
 	);

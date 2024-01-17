@@ -22,6 +22,7 @@ export const registersQuery = date => ({
 			}),
 		),
 	refetchOnWindowFocus: false,
+	enabled: !!date,
 });
 /**
  *

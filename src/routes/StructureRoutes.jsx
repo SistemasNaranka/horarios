@@ -25,7 +25,7 @@ function StructureRoutes() {
 		}
 	}, [queryResults, setEmployees]);
 
-	const isLoading = queryResults.some(query => query.isLoading || query.isRefetching);
+	const isLoading = queryResults.some(query => query.isRefetching || query.isPending);
 
 	if (isLoading) return <Loading />;
 

@@ -22,6 +22,7 @@ export const newsQuery = date => ({
 			}),
 		),
 	refetchOnWindowFocus: false,
+	enabled: !!date,
 });
 
 /**

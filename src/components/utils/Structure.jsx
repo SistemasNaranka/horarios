@@ -9,28 +9,30 @@ import Header from './Header';
 
 function Structure() {
 	const queryResults = useQueries({
-		queries: [roleQuery(), shiftQuery()],
+		queries: [roleQuery() /**shiftQuery()*/],
 	});
 
 	const setRole = roleStore(state => state.setRole);
-	const setShifts = shiftStore(state => state.setShifts);
+	//const setShifts = shiftStore(state => state.setShifts);
 
-	const isLoading = queryResults.some(query => query.isLoading || query.isRefetching);
+	const refetch = () => queryResults.map(query => query.refetch());
+
+	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);
 
 	useEffect(() => {
 		if (queryResults[0].data) {
 			setRole(queryResults[0].data);
 		}
-		if (queryResults[1].data) {
-			setShifts(queryResults[1].data);
-		}
-	}, [queryResults, setRole, setShifts]);
+		//if (queryResults[1].data) {
+		//	setShifts(queryResults[1].data);
+		//}
+	}, [queryResults, setRole /**,setShifts*/]);
 
 	if (isLoading) return <Loading />;
 
 	return (
 		<>
-			<Header />
+			<Header refetch={refetch} />
 			<StructureRoutes />
 		</>
 	);

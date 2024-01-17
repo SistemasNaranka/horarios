@@ -22,5 +22,5 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 			}),
 		),
 	refetchOnWindowFocus: false,
-	enabled: !!location,
+	enabled: !!location && !!startDate,
 });

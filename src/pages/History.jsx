@@ -11,7 +11,6 @@ const titles = ['Nombre', 'Evento', 'Fecha', 'Hora', 'Observaciones'];
 const today = dayjs().format('YYYY-MM-DD');
 
 const History = () => {
-	const [registers, setRegisters] = useState([]);
 	const [page, setPage] = useState(1);
 
 	const handlePage = (event, value) => setPage(value);
@@ -20,7 +19,7 @@ const History = () => {
 		queries: [allRegistersQuery(page, today), countRegQuery(today)],
 	});
 
-	const isLoading = queryResults.some(query => query.isLoading || query.isRefetching);
+	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);
 
 	if (isLoading) return <Loading />;
 

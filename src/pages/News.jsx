@@ -18,7 +18,7 @@ const News = () => {
 
 	const queryResults = useQueries({ queries: [allNewsQuery(page, today), countNewsQuery(today)] });
 
-	const isLoading = queryResults.some(query => query.isLoading || query.isRefetching);
+	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);
 
 	if (isLoading) return <Loading />;
 

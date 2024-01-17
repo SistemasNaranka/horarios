@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
 export const employeeStore = create(set => ({
-	employees: null,
+	employees: [],
 	setEmployees: employees => set(() => ({ employees })),
 }));

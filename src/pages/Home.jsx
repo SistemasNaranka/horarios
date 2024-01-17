@@ -13,7 +13,6 @@ function Home() {
 	const today = dayjs();
 	const todayDate = today.format('YYYY-MM-DD');
 	const location = roleStore(state => state.location);
-	const shifts = shiftStore(state => state.shifts);
 	const employees = employeeStore(state => state.employees);
 	const queryResults = useQueries({
 		queries: [
@@ -27,7 +26,7 @@ function Home() {
 		queryResults[2].refetch();
 	};
 
-	const isLoading = queryResults.some(query => query.isLoading || query.isRefetching);
+	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);
 
 	if (isLoading) return <Loading />;
 
