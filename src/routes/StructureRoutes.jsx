@@ -12,8 +12,7 @@ const Home = lazy(() => import('../pages/Home'));
 const News = lazy(() => import('../pages/News'));
 const History = lazy(() => import('../pages/History'));
 
-function StructureRoutes() {
-	const location = roleStore(state => state.location);
+function StructureRoutes({ location }) {
 	const setEmployees = employeeStore(state => state.setEmployees);
 	const queryResults = useQueries({
 		queries: [employeesLocationQuery(location)],

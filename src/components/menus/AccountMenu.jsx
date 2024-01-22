@@ -3,11 +3,12 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { client } from '../../clients/client';
+import { roleStore } from '../../stores/roleStore';
 
 const AccountMenu = () => {
 	const [anchorElUser, setAnchorElUser] = useState(null);
 	const navigate = useNavigate();
-
+	const remove = roleStore(state => state.remove);
 	const handleOpenUserMenu = e => {
 		setAnchorElUser(e.currentTarget);
 	};
@@ -17,7 +18,10 @@ const AccountMenu = () => {
 	};
 
 	const handleLogOut = () => {
-		client.logout().then(() => navigate('/'));
+		client.logout().then(() => {
+			navigate('/');
+			remove();
+		});
 	};
 
 	return (

@@ -33,7 +33,7 @@ function Structure() {
 	return (
 		<>
 			<Header refetch={refetch} />
-			<StructureRoutes />
+			<StructureRoutes location={queryResults[0].data.ubicacion} />
 		</>
 	);
 }
