@@ -19,11 +19,6 @@ export const PAGES_ROLE = {
 		{ title: 'Registros', id: HOME_PATH },
 		{ title: 'Novedades', id: NEWS_PATH },
 		{ title: 'Historial', id: HISTORY_PATH },
-	],
-	tiendas: [
-		{ title: 'Registros', id: HOME_PATH },
-		{ title: 'Novedades', id: NEWS_PATH },
-		{ title: 'Historial', id: HISTORY_PATH },
 		{ title: 'Malla Horaria', id: MESH_PATH },
 	],
 	Comercial: [

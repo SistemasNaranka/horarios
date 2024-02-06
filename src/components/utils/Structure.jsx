@@ -33,7 +33,10 @@ function Structure() {
 	return (
 		<>
 			<Header refetch={refetch} />
-			<StructureRoutes location={queryResults[0].data.ubicacion} />
+			<StructureRoutes
+				location={queryResults[0].data.ubicacion}
+				role={queryResults[0].data.role.name}
+			/>
 		</>
 	);
 }
