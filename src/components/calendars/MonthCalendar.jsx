@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { daysName } from '../../utils/constants';
 import { setColor } from '../../utils/functions';
 import TableHis from '../tables/TableHis';
@@ -32,10 +33,10 @@ function MonthCalendar({
 						key={`row_${week}`}
 						className={dataWeek.employeeWeek[week].length === 0 ? 'border-b' : ''}
 					>
-						<td className='border-r min-w-[205.5px]'>{''}</td>
+						<td className='border-r w-1/12'>{''}</td>
 						{days.slice(week * 7, week * 7 + 7).map(day => (
 							<td
-								className={`py-3 px-2 whitespace-nowrap border-r font-semibold text-3xl min-w-[205.5px] ${setColor(
+								className={`py-3 px-2 whitespace-nowrap border-r font-medium text-3xl w-1/12 ${setColor(
 									curDay,
 									day,
 									holidays,
@@ -75,4 +76,4 @@ function MonthCalendar({
 		</TableHis>
 	);
 }
-export default MonthCalendar;
+export default memo(MonthCalendar);

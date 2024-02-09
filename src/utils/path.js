@@ -9,9 +9,9 @@ export const HISTORY_RELATIVE = '/history';
 export const HISTORY_PATH = HOME_PATH + HISTORY_RELATIVE;
 
 export const MESH_RELATIVE = '/mesh';
-export const MESH_WEEK_RELATIVE = '/week';
+export const CREATE_MESH_RELATIVE = '/week';
 export const MESH_PATH = HOME_PATH + MESH_RELATIVE;
-export const MESH_WEEK_PATH = HOME_PATH + MESH_WEEK_RELATIVE;
+export const CREATE_MESH_PATH = HOME_PATH + CREATE_MESH_RELATIVE;
 
 export const PAGES_ROLE = {
 	simple: [{ title: 'Registros', id: HOME_PATH }],
@@ -21,8 +21,5 @@ export const PAGES_ROLE = {
 		{ title: 'Historial', id: HISTORY_PATH },
 		{ title: 'Malla Horaria', id: MESH_PATH },
 	],
-	Comercial: [
-		{ title: 'Malla Horaria', id: HOME_PATH },
-		{ title: 'Personal temporal', id: MESH_PATH },
-	],
+	Comercial: [{ title: 'Malla Horaria', id: HOME_PATH }],
 };

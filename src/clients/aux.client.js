@@ -56,6 +56,22 @@ export const employeesLocationQuery = location => ({
 });
 
 /**
+ * Get the events
+ * @returns
+ */
+export const eventsQuery = () => ({
+	queryKey: ['events'],
+	queryFn: async () =>
+		await client.request(readItems('eventos', { fields: ['nombre', 'id'], sort: 'nombre' })),
+});
+
+export const shopsQuery = () => ({
+	queryKey: ['tiendas'],
+	queryFn: async () =>
+		await client.request(readItems('ubicaciones', { fields: ['nombre', 'id'], sort: 'nombre' })),
+});
+
+/**
  * Create a new break
  * @param {String} event
  * @param {String} cc

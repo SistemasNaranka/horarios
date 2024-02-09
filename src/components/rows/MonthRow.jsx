@@ -1,4 +1,5 @@
 import { Dayjs } from 'dayjs';
+import { eventStore } from '../../stores/eventStore';
 
 /**
  *
@@ -10,8 +11,9 @@ import { Dayjs } from 'dayjs';
  * @returns
  */
 function MonthRow({ border = false, dataEmployee, days, employee }) {
+	const events = eventStore(state => state.events);
 	return (
-		<tr className={`hover:bg-gray-100 ${border && 'border-b-2'}`}>
+		<tr className={`hover:bg-gray-100 ${border && 'border-b'}`}>
 			<td className='py-3 px-2 whitespace-nowrap border-r font-semibold text-left font-sans'>
 				{employee}
 			</td>
@@ -19,17 +21,18 @@ function MonthRow({ border = false, dataEmployee, days, employee }) {
 				const dayString = day.format('YYYY-MM-DD');
 				const curRegister = dataEmployee.find(value => value.fecha === dayString);
 				const shift = curRegister?.turno;
+				const news = curRegister?.novedad;
 				return curRegister ? (
-					shift ? (
-						<td className='py-3 px-2 whitespace-nowrap border-r' key={dayString + employee}>
-							T{shift}
-						</td>
-					) : (
+					news ? (
 						<td
 							className='py-3 px-2 whitespace-nowrap border-r font-sans'
 							key={dayString + employee}
 						>
-							{curRegister?.novedad?.nombre}
+							{events.get(news).nombre}
+						</td>
+					) : (
+						<td className='py-3 px-2 whitespace-nowrap border-r' key={dayString + employee}>
+							T{shift}
 						</td>
 					)
 				) : (

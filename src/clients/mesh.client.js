@@ -1,4 +1,4 @@
-import { readItems } from '@directus/sdk';
+import { createItem, readItems, updateItem } from '@directus/sdk';
 import { client } from './client';
 
 const mesh = 'malla';
@@ -15,7 +15,7 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 	queryFn: async () =>
 		await client.request(
 			readItems(mesh, {
-				fields: ['fecha', 'turno', { empleado: ['id', 'nombre'] }, { novedad: ['nombre'] }],
+				fields: ['id', 'fecha', 'turno', 'novedad', { empleado: ['id', 'nombre'] }],
 				filter: {
 					fecha: {
 						_between: [startDate, endDate],
@@ -31,3 +31,9 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 	refetchOnWindowFocus: false,
 	enabled: !!location && !!startDate && !!endDate,
 });
+
+export const createMeshList = async data =>
+	await client.request(createItem(mesh, data, { fields: ['id'] }));
+
+export const updateMesh = async (id, data) =>
+	await client.request(updateItem(mesh, id, data, { fields: ['id'] }));

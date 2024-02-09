@@ -4,7 +4,7 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import { Button, Paper, Tooltip } from '@mui/material';
 import { getHolidaysByYear } from 'festivos-colombia';
 import { roleStore } from '../stores/roleStore';
-import { MESH_WEEK_PATH } from '../utils/path';
+import { CREATE_MESH_PATH } from '../utils/path';
 import { useLayoutEffect } from 'react';
 import { create } from 'zustand';
 import dayjs from 'dayjs';
@@ -15,7 +15,7 @@ import { useQueries } from '@tanstack/react-query';
 import MonthRow from '../components/rows/MonthRow';
 import Loading from '../components/utils/Loading';
 
-const useMeshStore = create(set => ({
+const meshStore = create(set => ({
 	month: 0,
 	day: dayjs(),
 	days: [],
@@ -39,7 +39,7 @@ const useMeshStore = create(set => ({
 }));
 
 function Mesh() {
-	const [month, day, days, holidays, weeksCalendar, setMonth] = useMeshStore(state => [
+	const [month, day, days, holidays, weeksCalendar, setMonth] = meshStore(state => [
 		state.month,
 		state.day,
 		state.days,
@@ -52,7 +52,7 @@ function Mesh() {
 	const first = days[0]?.format('YYYY-MM-DD');
 	const second = days[days.length - 1]?.format('YYYY-MM-DD');
 	const queryResult = useQueries({
-		queries: [meshRangeQuery(first, second, location, true)],
+		queries: [meshRangeQuery(first, second, location)],
 	});
 
 	useLayoutEffect(() => {
@@ -71,10 +71,10 @@ function Mesh() {
 	};
 
 	const handleMeshWeekClick = event => {
-		navigate(MESH_WEEK_PATH);
+		navigate(CREATE_MESH_PATH);
 	};
 
-	const isLoading = queryResult.some(query => query.isLoading);
+	const isLoading = queryResult.some(query => query.isPending || query.isRefetching);
 
 	if (isLoading) return <Loading />;
 
