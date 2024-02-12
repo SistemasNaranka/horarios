@@ -12,14 +12,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { memo } from 'react';
 import dayjs from 'dayjs';
+import { createMeshList, removeMeshQuery } from '../../clients/mesh.client';
 import { dateEventSchema } from '../../schemas/eventSchema';
-import { createListNews } from '../../clients/news.client';
 import DatePickerInput from '../inputs/DatePickerInput';
+import { eventStore } from '../../stores/eventStore';
 import { roleStore } from '../../stores/roleStore';
 import successAlert from '../alerts/SuccessAlert';
 import SelectInput from '../inputs/SelectInput';
 import errorAlert from '../alerts/ErrorAlert';
-import { news } from '../../utils/constants';
 
 const today = dayjs();
 
@@ -35,50 +35,70 @@ const today = dayjs();
  */
 const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
 	const location = roleStore(state => state.location);
+	const events = eventStore(state => state.eventsList);
 	const {
 		register,
 		handleSubmit,
 		control,
 		formState: { errors },
+		reset,
 	} = useForm({
 		resolver: yupResolver(dateEventSchema),
 		defaultValues: {
 			time: today,
-			event: 'Descanso',
+			event: 1,
 		},
 	});
 
 	const onSubmit = data => {
 		onClose();
 		const list = [];
+		const todayDate = today.format('YYYY-MM-DD');
+		const lastDate = data.time.format('YYYY-MM-DD');
 		for (let index = 0; index < data.time.diff(today, 'day', true) + 1; index++) {
 			list.push({
 				empleado: cc,
 				novedad: data.event,
-				...(data.review && { observaciones: data.review }),
 				fecha: today.add(index, 'day').format('YYYY-MM-DD'),
 				tienda: location,
+				...(data.review && { observaciones: data.review }),
 			});
 		}
+		console.log(list);
 
-		createListNews(list)
+		removeMeshQuery(todayDate, lastDate, cc)
+			.then(res => createMeshList(list))
 			.then(() => {
 				addNews(cc);
 				successAlert();
 			})
-			.catch(() => errorAlert('Hubo error guardando la novedad'));
+			.catch(() => errorAlert('Hubo error guardando la novedad'))
+			.finally(() =>
+				reset({
+					time: today,
+					event: 1,
+				}),
+			);
+	};
+
+	const handleClose = () => {
+		onClose();
+		reset({
+			time: today,
+			event: 1,
+		});
 	};
 
 	return (
-		<Dialog open={open} onClose={onClose}>
+		<Dialog open={open} onClose={handleClose} keepMounted={false}>
 			<DialogTitle>Reporta una novedad</DialogTitle>
 			<DialogContent>
 				<DialogContentText>Escoja la novedad presentada para {name}:</DialogContentText>
 				<div className='mt-2 flex flex-col gap-1 w-full'>
 					<SelectInput name='event' label='Novedad' control={control} default={'Compensatorio'}>
-						{news.map(value => (
-							<MenuItem value={value} key={value}>
-								{value}
+						{events.map(value => (
+							<MenuItem value={value.id} key={value.id}>
+								{value.nombre}
 							</MenuItem>
 						))}
 					</SelectInput>

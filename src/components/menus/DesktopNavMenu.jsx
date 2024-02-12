@@ -1,5 +1,5 @@
-import { Button, Paper, Tooltip } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { Button, Paper } from '@mui/material';
 
 /**
  *
@@ -8,15 +8,22 @@ import { useNavigate } from 'react-router-dom';
  * @returns
  */
 const DesktopNavMenu = ({ pages }) => {
-	const navigate = useNavigate();
+	const { pathname } = useLocation();
+
 	return (
 		<Paper className='hidden border border-gray-200 p-1 md:block' elevation={3}>
 			{pages.map(page => (
-				<Tooltip key={`desktopNavMenu${page.id}`} title={page.title}>
-					<Button onClick={() => navigate(page.id)} sx={{ marginX: '0.75rem' }}>
-						<p className='p-1 font-semibold font-sans text-lg'>{page.title}</p>
+				<Link to={page.id} key={page.id}>
+					<Button sx={{ marginX: '0.75rem' }}>
+						<p
+							className={`p-1 font-semibold font-sans text-lg ${
+								pathname !== page.id && ' text-blue-500'
+							} `}
+						>
+							{page.title}
+						</p>
 					</Button>
-				</Tooltip>
+				</Link>
 			))}
 		</Paper>
 	);

@@ -1,5 +1,8 @@
 import { Dayjs } from 'dayjs';
+import { memo } from 'react';
 import { eventStore } from '../../stores/eventStore';
+import { shiftStore } from '../../stores/shiftStore';
+import HtmlTooltip from '../alerts/HtmlTooltip';
 
 /**
  *
@@ -12,6 +15,8 @@ import { eventStore } from '../../stores/eventStore';
  */
 function MonthRow({ border = false, dataEmployee, days, employee }) {
 	const events = eventStore(state => state.events);
+	const shiftsMap = shiftStore(state => state.shiftsMap);
+
 	return (
 		<tr className={`hover:bg-gray-100 ${border && 'border-b'}`}>
 			<td className='py-3 px-2 whitespace-nowrap border-r font-semibold text-left font-sans'>
@@ -32,7 +37,15 @@ function MonthRow({ border = false, dataEmployee, days, employee }) {
 						</td>
 					) : (
 						<td className='py-3 px-2 whitespace-nowrap border-r' key={dayString + employee}>
-							T{shift}
+							<HtmlTooltip
+								title={
+									<>
+										<p className=' text-lg'>{shiftsMap.get(shift)}</p>
+									</>
+								}
+							>
+								<div>T{shift}</div>
+							</HtmlTooltip>
 						</td>
 					)
 				) : (
@@ -44,4 +57,4 @@ function MonthRow({ border = false, dataEmployee, days, employee }) {
 		</tr>
 	);
 }
-export default MonthRow;
+export default memo(MonthRow);

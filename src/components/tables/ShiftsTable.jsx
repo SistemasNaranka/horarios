@@ -1,11 +1,11 @@
 import { memo } from 'react';
-import { useShiftStore } from '../../stores/shiftsStore';
+import { shiftStore } from '../../stores/shiftStore';
 import TableHis from './TableHis';
 
 const ShiftsTable = () => {
-	const stringShifts = useShiftStore(state => state.stringShifts);
+	const stringShifts = shiftStore(state => state.stringShifts);
 
-	const titles = ['Turno', ...Array.from(Array(stringShifts.length), (_, i) => `Turno ${i + 1}`)];
+	const titles = ['Turnos', ...Array.from(Array(stringShifts.length), (_, i) => `Turno ${i + 1}`)];
 
 	return (
 		<TableHis titles={titles} center overy={false}>

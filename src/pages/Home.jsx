@@ -3,7 +3,6 @@ import dayjs from 'dayjs';
 import { meshRangeQuery } from '../clients/mesh.client';
 import { employeeStore } from '../stores/employeeStore';
 import { registersQuery } from '../clients/reg.client';
-import { newsQuery } from '../clients/news.client';
 import Loading from '../components/utils/Loading';
 import { shiftStore } from '../stores/shiftStore';
 import RegCard from '../components/cards/RegCard';
@@ -14,27 +13,23 @@ function Home() {
 	const todayDate = today.format('YYYY-MM-DD');
 	const location = roleStore(state => state.location);
 	const employees = employeeStore(state => state.employees);
+	const shifts = shiftStore(state => state.shifts);
 	const queryResults = useQueries({
-		queries: [
-			meshRangeQuery(todayDate, todayDate, location),
-			registersQuery(todayDate),
-			newsQuery(todayDate),
-		],
+		queries: [registersQuery(todayDate), meshRangeQuery(todayDate, todayDate, location)],
 	});
 
 	const addNews = () => {
-		queryResults[2].refetch();
+		queryResults[1].refetch();
 	};
 
 	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);
 
 	if (isLoading) return <Loading />;
 
-	const newsData = queryResults[2].data;
-
-	const regsData = queryResults[1].data;
-
-	const employeesData = employees;
+	const regsData = queryResults[0].data;
+	const mesh = queryResults[1].data;
+	const newsData = mesh.filter(item => item.novedad);
+	const employeesData = shifts.length > 0 ? mesh.map(item => item?.empleado) : employees;
 
 	return (
 		<main className='m-2 flex justify-evenly flex-wrap gap-y-8 gap-x-4'>
@@ -42,7 +37,7 @@ function Home() {
 				.filter(employee => !newsData.find(item => item.empleado === employee.id))
 				.map(
 					employee =>
-						!newsData.find(news => news.empleado === employee.id) && (
+						!newsData.find(news => news.empleado.id === employee.id) && (
 							<RegCard
 								key={employee.id}
 								employee={employee}

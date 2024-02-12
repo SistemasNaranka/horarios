@@ -46,6 +46,11 @@ export const allNewsQuery = (page, date) => ({
 			readItems(table, {
 				fields: [{ empleado: ['nombre'] }, 'novedad', 'observaciones', 'fecha', 'empleado'],
 				sort: '-fecha',
+				filter: {
+					fecha: {
+						_lte: date,
+					},
+				},
 				limit: limitPage,
 				page: page || 1,
 			}),

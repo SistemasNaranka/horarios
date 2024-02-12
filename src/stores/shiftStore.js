@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 
 export const shiftStore = create(set => ({
 	shifts: [],
+	shiftsMap: new Map(),
 	stringShifts: [],
 	setShifts: data => {
 		const shifts = data.map(shift => ({
@@ -11,7 +12,8 @@ export const shiftStore = create(set => ({
 			final_turno: dayjs(`1/1/1 ${shift.final_turno}`).format('hh:mmA'),
 		}));
 		const stringShifts = shifts.map(item => shiftToString(item));
-		set(() => ({ shifts, stringShifts }));
+		const shiftsMap = new Map(stringShifts.map((v, i) => [shifts[i].id, v]));
+		set(() => ({ shifts, stringShifts, shiftsMap }));
 	},
 }));
 

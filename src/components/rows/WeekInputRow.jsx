@@ -1,11 +1,11 @@
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
-import { Button, ListSubheader, MenuItem, Tooltip } from '@mui/material';
-import SelectInput from '../inputs/SelectInput';
-import { roleStore } from '../../stores/roleStore';
+import { Button, ListSubheader, MenuItem } from '@mui/material';
+import { useState } from 'react';
 import { createMeshList } from '../../clients/mesh.client';
 import { eventStore } from '../../stores/eventStore';
+import { shiftStore } from '../../stores/shiftStore';
+import { roleStore } from '../../stores/roleStore';
 import successAlert from '../alerts/SuccessAlert';
+import SelectInput from '../inputs/SelectInput';
 
 const itemClass = 'py-3 px-4 whitespace-nowrap border-b border-r w-1/12 z-0';
 const lastClass = 'py-3 px-4 whitespace-nowrap border-r w-1/12 z-0';
@@ -21,8 +21,10 @@ const lastClass = 'py-3 px-4 whitespace-nowrap border-r w-1/12 z-0';
  * @returns
  */
 function WeekInputRow({ daysInWeek, name = '', cc, control, i, getValues }) {
+	const shifts = shiftStore(state => state.shifts);
 	const location = roleStore(state => state.location);
 	const eventsList = eventStore(state => state.eventsList);
+	const [disabled, setDisabled] = useState(false);
 	const onSubmit = () => {
 		const values = Object.entries(getValues(`mesh.${i}`));
 		const mesh = values.reduce((a, v) => {
@@ -39,7 +41,10 @@ function WeekInputRow({ daysInWeek, name = '', cc, control, i, getValues }) {
 		}, []);
 		if (mesh.length > 0) {
 			createMeshList(mesh)
-				.then(successAlert)
+				.then(() => {
+					successAlert();
+					setDisabled(true);
+				})
 				.catch(err => errorAlert('Hubo error guardando la pausa'));
 		}
 	};
@@ -57,16 +62,19 @@ function WeekInputRow({ daysInWeek, name = '', cc, control, i, getValues }) {
 						<SelectInput
 							control={control}
 							label='Turno'
+							disabled={disabled}
 							name={`mesh.${i}.${day.format('YYYY-MM-DD')}`}
 							key={day}
 						>
 							<ListSubheader>Turnos</ListSubheader>
-							<MenuItem value={1} key={`day${index}`}>
-								1
-							</MenuItem>
+							{shifts.map((shift, i) => (
+								<MenuItem value={shift.id} key={`day${index}-${i}`}>
+									{i + 1}
+								</MenuItem>
+							))}
 							<ListSubheader>Novedades</ListSubheader>
 							{eventsList.map(event => (
-								<MenuItem value={`n${event.id}`} key={`nday${index}`}>
+								<MenuItem value={`n${event.id}`} key={`nday${event.id}`}>
 									{event.nombre}
 								</MenuItem>
 							))}
@@ -75,7 +83,7 @@ function WeekInputRow({ daysInWeek, name = '', cc, control, i, getValues }) {
 				</td>
 			))}
 			<td className='border-r text-center border-b '>
-				<Button color='success' variant='contained' onClick={onSubmit}>
+				<Button color='success' variant='contained' onClick={onSubmit} disabled={disabled}>
 					Guardar
 				</Button>
 			</td>

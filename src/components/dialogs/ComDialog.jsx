@@ -7,17 +7,19 @@ import {
 	ListSubheader,
 	MenuItem,
 } from '@mui/material';
-import TableHis from '../tables/TableHis';
-import { daysName, news } from '../../utils/constants';
-import { eventStore } from '../../stores/eventStore';
-import SelectInput from '../inputs/SelectInput';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { shopStore } from '../../stores/shopStore';
 import { updateMesh } from '../../clients/mesh.client';
+import { eventStore } from '../../stores/eventStore';
+import { shiftStore } from '../../stores/shiftStore';
+import { shopStore } from '../../stores/shopStore';
+import { daysName } from '../../utils/constants';
+import SelectInput from '../inputs/SelectInput';
+import TableHis from '../tables/TableHis';
 
 function ComDialog({ open, data, days, employee, handleClose, curLocation }) {
 	const eventsList = eventStore(state => state.eventsList);
 	const shopsList = shopStore(state => state.shopsList);
+	const [stringShifts, shifts] = shiftStore(state => [state.stringShifts, state.shifts]);
 
 	const { handleSubmit, control } = useForm({
 		defaultValues: {
@@ -97,12 +99,18 @@ function ComDialog({ open, data, days, employee, handleClose, curLocation }) {
 													.map(shop => {
 														return [
 															<ListSubheader>{shop.nombre}</ListSubheader>,
-															<MenuItem value={1} key={`day${index}`}>
-																1
-															</MenuItem>,
+															shifts.map((shift, i) => {
+																const item = shift.turnos_tienda.find(
+																	item => item.ubicaciones_id === shop.id,
+																);
+																return item ? (
+																	<MenuItem value={shift.id} key={`day${index}-${i}`}>
+																		{stringShifts[i]}
+																	</MenuItem>
+																) : null;
+															}),
 														];
 													})}
-
 												<ListSubheader>Novedades</ListSubheader>
 												{eventsList.map(event => (
 													<MenuItem value={`n${event.id}`} key={`day${index}-${event.nombre}`}>

@@ -1,23 +1,23 @@
 import { useQueries } from '@tanstack/react-query';
 import { lazy, useEffect } from 'react';
 import { eventsQuery, roleQuery, shiftQuery } from '../../clients/aux.client';
+import { eventStore } from '../../stores/eventStore';
 import { shiftStore } from '../../stores/shiftStore';
 import { roleStore } from '../../stores/roleStore';
 import Loading from './Loading';
 import Header from './Header';
-import { eventStore } from '../../stores/eventStore';
 
 const StructureRoutesCom = lazy(() => import('../../routes/StructureRoutesCom'));
 const StructureRoutes = lazy(() => import('../../routes/StructureRoutes'));
 
 function Structure() {
 	const queryResults = useQueries({
-		queries: [roleQuery(), eventsQuery() /**shiftQuery()*/],
+		queries: [roleQuery(), eventsQuery(), shiftQuery()],
 	});
 
 	const setRole = roleStore(state => state.setRole);
 	const setEvents = eventStore(state => state.setEvents);
-	//const setShifts = shiftStore(state => state.setShifts);
+	const setShifts = shiftStore(state => state.setShifts);
 
 	const refetch = () => queryResults.map(query => query.refetch());
 
@@ -30,10 +30,10 @@ function Structure() {
 		if (queryResults[1].data) {
 			setEvents(queryResults[1].data);
 		}
-		//if (queryResults[1].data) {
-		//	setShifts(queryResults[1].data);
-		//}
-	}, [queryResults, setRole, setEvents /**,setShifts*/]);
+		if (queryResults[2].data) {
+			setShifts(queryResults[2].data);
+		}
+	}, [queryResults, setRole, setEvents, setShifts]);
 
 	if (isLoading) return <Loading />;
 

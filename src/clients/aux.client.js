@@ -26,7 +26,7 @@ export const shiftQuery = () => ({
 					'final_turno',
 					'tiempo_laborado',
 					'tiempo_almuerzo',
-					{ turno_tienda: ['lugares_id'] },
+					{ turnos_tienda: ['ubicaciones_id'] },
 				],
 			}),
 		),

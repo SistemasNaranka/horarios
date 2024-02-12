@@ -9,6 +9,7 @@ import { useLayoutEffect } from 'react';
 import { create } from 'zustand';
 import dayjs from 'dayjs';
 import MonthCalendar from '../components/calendars/MonthCalendar';
+import ShiftsTable from '../components/tables/ShiftsTable';
 import { processDataRegisters } from '../utils/functions';
 import { meshRangeQuery } from '../clients/mesh.client';
 import { useQueries } from '@tanstack/react-query';
@@ -102,6 +103,9 @@ function Mesh() {
 				<Button size='large' onClick={handleMeshWeekClick} variant='contained' color='success'>
 					Crear Malla
 				</Button>
+			</div>
+			<div className='pb-8 mx-auto text-lg text-center'>
+				<ShiftsTable />
 			</div>
 			<MonthCalendar
 				key={day.month()}
