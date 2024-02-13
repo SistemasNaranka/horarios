@@ -6,10 +6,10 @@ import { ReactNode } from 'react';
  *
  * @param {Object} props
  * @param {String} props.name
- * @param {Control} props.control
  * @param {String} props.label
- * @param {ReactNode} props.children
+ * @param {Control} props.control
  * @param {Boolean} props.disabled
+ * @param {ReactNode} props.children
  * @returns
  */
 const SelectInput = ({ name, label, children, control, disabled = false }) => {

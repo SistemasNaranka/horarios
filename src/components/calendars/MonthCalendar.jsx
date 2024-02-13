@@ -8,12 +8,12 @@ const titles = ['Nombre', ...daysName];
 /**
  *
  * @param {Object} props
- * @param {Array<Dayjs>} props.dayjs
- * @param {Array<String>} props.holidays
- * @param {Array<Number>} props.weeksCalendar
  * @param {Dayjs} props.curDay
+ * @param {Array<Dayjs>} props.dayjs
  * @param {String} props.curLocation
+ * @param {Array<String>} props.holidays
  * @param {ReactNode} props.weekComponent
+ * @param {Array<Number>} props.weeksCalendar
  * @returns
  */
 function MonthCalendar({

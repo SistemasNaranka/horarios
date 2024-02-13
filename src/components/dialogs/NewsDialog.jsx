@@ -26,11 +26,11 @@ const today = dayjs();
 /**
  *
  * @param {Object} props
+ * @param {String} props.cc
  * @param {String} props.name
  * @param {Boolean} props.open
  * @param {Function} props.onClose
  * @param {Function} props.addNews
- * @param {String} props.cc
  * @returns
  */
 const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
@@ -64,7 +64,6 @@ const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
 				...(data.review && { observaciones: data.review }),
 			});
 		}
-		console.log(list);
 
 		removeMeshQuery(todayDate, lastDate, cc)
 			.then(res => createMeshList(list))
@@ -72,7 +71,7 @@ const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
 				addNews(cc);
 				successAlert();
 			})
-			.catch(() => errorAlert('Hubo error guardando la novedad'))
+			.catch(e => errorAlert('Hubo error guardando la novedad'))
 			.finally(() =>
 				reset({
 					time: today,

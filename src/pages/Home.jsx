@@ -19,7 +19,9 @@ function Home() {
 	});
 
 	const addNews = () => {
-		queryResults[1].refetch();
+		for (const q of queryResults) {
+			q.refetch();
+		}
 	};
 
 	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);

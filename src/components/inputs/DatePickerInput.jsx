@@ -5,9 +5,9 @@ import { Dayjs } from 'dayjs';
 /**
  *
  * @param {Object} props
+ * @param {Dayjs} props.today
  * @param {String} props.name
  * @param {String} props.label
- * @param {Dayjs} props.today
  * @param {Control} props.control
  * @returns
  */

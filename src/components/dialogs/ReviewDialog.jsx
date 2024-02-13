@@ -18,11 +18,10 @@ import errorAlert from '../alerts/ErrorAlert';
 /**
  *
  * @param {Object} props
- * @param {Boolean} props.open
- * @param {Function} props.onClose
- * @param {String} props.checkText
  * @param {String} props.id
  * @param {String} props.review
+ * @param {Function} props.onClose
+ * @param {String} props.checkText
  * @param {Function} props.getReview
  * @returns
  */

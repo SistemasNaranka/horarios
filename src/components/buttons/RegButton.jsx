@@ -11,10 +11,10 @@ import successAlert from '../alerts/SuccessAlert';
 /**
  *
  * @param {Object} props
- * @param {Boolean} props.disabled
- * @param {Function} props.handleNext
  * @param {String} props.text
  * @param {Object} props.data
+ * @param {Boolean} props.disabled
+ * @param {Function} props.handleNext
  * @returns
  */
 const RegButton = ({ disabled, handleNext, text = '', data, employee }) => {

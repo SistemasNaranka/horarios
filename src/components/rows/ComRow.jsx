@@ -2,6 +2,16 @@ import { useState } from 'react';
 import { eventStore } from '../../stores/eventStore';
 import ComDialog from '../dialogs/ComDialog';
 
+/**
+ *
+ * @param {Object} props
+ * @param {Boolean} props.border
+ * @param {String} props.employee
+ * @param {Array<Dayjs>} props.days
+ * @param {Number} props.curLocation
+ * @param {Object} props.dataEmployee
+ * @returns
+ */
 function ComRow({ border = false, dataEmployee, days, employee, curLocation }) {
 	const events = eventStore(state => state.events);
 	const [data, setData] = useState(dataEmployee);

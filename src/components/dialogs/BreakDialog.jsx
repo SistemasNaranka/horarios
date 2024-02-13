@@ -21,10 +21,10 @@ import errorAlert from '../alerts/ErrorAlert';
 /**
  *
  * @param {Object} props
+ * @param {String} props.cc
  * @param {String} props.name
  * @param {Boolean} props.open
  * @param {Function} props.onClose
- * @param {String} props.cc
  * @returns
  */
 const BreakDialog = ({ name = '', open = false, onClose, cc }) => {

@@ -4,8 +4,8 @@ import { memo } from 'react';
 /**
  *
  * @param {Object} props
- * @param {Number} props.count
  * @param {Number} props.page
+ * @param {Number} props.count
  * @param {Function} props.handleNewPage
  * @returns
  */

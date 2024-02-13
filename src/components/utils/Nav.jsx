@@ -4,6 +4,12 @@ import { roleStore } from '../../stores/roleStore';
 import MovilNavMenu from '../menus/MovilNavMenu';
 import { PAGES_ROLE } from '../../utils/path';
 
+/**
+ *
+ * @param {Object} props
+ * @param {Function} props.refetch
+ * @returns
+ */
 const Nav = ({ refetch }) => {
 	const role = roleStore(state => state.role);
 	const pages = PAGES_ROLE[role?.length > 0 ? role : 'simple'];

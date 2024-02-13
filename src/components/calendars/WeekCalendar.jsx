@@ -1,6 +1,5 @@
 import { useFieldArray, useForm } from 'react-hook-form';
 import { employeeStore } from '../../stores/employeeStore';
-import { roleStore } from '../../stores/roleStore';
 import { daysName } from '../../utils/constants';
 import { setColorWeek } from '../../utils/functions';
 import MonthRow from '../rows/MonthRow';
@@ -12,10 +11,10 @@ const titles = ['Nombre', ...daysName, ''];
 /**
  *
  * @param {Object} props
- * @param {Array<Dayjs>} props.days
- * @param {Array} props.holidays
- * @param {Array} props.data
  * @param {Dayjs} props.day
+ * @param {Array} props.data
+ * @param {Array} props.holidays
+ * @param {Array<Dayjs>} props.days
  * @returns
  */
 function WeekCalendar({ days, day, holidays, data }) {

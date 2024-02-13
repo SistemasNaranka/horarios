@@ -8,9 +8,10 @@ import { events } from '../../utils/constants';
 import RegButton from '../buttons/RegButton';
 
 /**
- *
- * @param {Array} checks
- * @param {String} event
+ * @param {Object} props
+ * @param {Array} props.checks
+ * @param {String} props.event
+ * @param {Boolean} props.disabled
  * @returns
  */
 const findEvent = (checks, event, disabled = false) => {

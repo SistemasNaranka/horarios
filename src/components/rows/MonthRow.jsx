@@ -8,9 +8,9 @@ import HtmlTooltip from '../alerts/HtmlTooltip';
  *
  * @param {Object} props
  * @param {Boolean} props.border
- * @param {Object} props.dataEmployee
- * @param {Array<Dayjs>} props.days
  * @param {String} props.employee
+ * @param {Array<Dayjs>} props.days
+ * @param {Object} props.dataEmployee
  * @returns
  */
 function MonthRow({ border = false, dataEmployee, days, employee }) {

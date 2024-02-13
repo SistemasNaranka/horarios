@@ -16,6 +16,17 @@ import { daysName } from '../../utils/constants';
 import SelectInput from '../inputs/SelectInput';
 import TableHis from '../tables/TableHis';
 
+/**
+ *
+ * @param {Object} props
+ * @param {Array} props.data
+ * @param {Array} props.days
+ * @param {Boolean} props.open
+ * @param {Object} props.employee
+ * @param {Number} props.curLocation
+ * @param {Function} props.handleClose
+ * @returns
+ */
 function ComDialog({ open, data, days, employee, handleClose, curLocation }) {
 	const eventsList = eventStore(state => state.eventsList);
 	const shopsList = shopStore(state => state.shopsList);

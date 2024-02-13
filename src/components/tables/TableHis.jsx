@@ -4,11 +4,11 @@ import { ReactNode } from 'react';
 /**
  *
  * @param {Object} props
+ * @param {String} props.h
+ * @param {Boolean} props.overy
+ * @param {Boolean} props.center
  * @param {ReactNode} props.children
  * @param {Array<String>} props.titles
- * @param {Boolean} props.center
- * @param {Boolean} props.overy
- * * @param {String} props.h
  * @returns
  */
 const TableHis = ({ children, titles = [], center = false, overy = true, h = 80 }) => {

@@ -3,8 +3,8 @@ import styles from './styles/loader.module.css';
 /**
  *
  * @param {Object} props
- * @param {String} props.color
  * @param {String} props.size
+ * @param {String} props.color
  * @returns
  */
 const Loader = ({ color = '#6EB500', size = '4rem' }) => {

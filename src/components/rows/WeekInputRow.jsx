@@ -7,24 +7,21 @@ import { roleStore } from '../../stores/roleStore';
 import successAlert from '../alerts/SuccessAlert';
 import SelectInput from '../inputs/SelectInput';
 
-const itemClass = 'py-3 px-4 whitespace-nowrap border-b border-r w-1/12 z-0';
-const lastClass = 'py-3 px-4 whitespace-nowrap border-r w-1/12 z-0';
-
 /**
  *
  * @param {Object} props
- * @param {Array<Dayjs>} props.daysInWeek
- * @param {String} props.name
  * @param {String} props.cc
+ * @param {String} props.name
  * @param {any} props.control
  * @param {any} props.register
+ * @param {Array<Dayjs>} props.daysInWeek
  * @returns
  */
 function WeekInputRow({ daysInWeek, name = '', cc, control, i, getValues }) {
 	const shifts = shiftStore(state => state.shifts);
 	const location = roleStore(state => state.location);
 	const eventsList = eventStore(state => state.eventsList);
-	const [disabled, setDisabled] = useState(false);
+	const [disabled, setDisabled] = useState(shifts.length > 0 ? false : true);
 	const onSubmit = () => {
 		const values = Object.entries(getValues(`mesh.${i}`));
 		const mesh = values.reduce((a, v) => {
@@ -82,7 +79,7 @@ function WeekInputRow({ daysInWeek, name = '', cc, control, i, getValues }) {
 					</div>
 				</td>
 			))}
-			<td className='border-r text-center border-b '>
+			<td className='border-r text-center border-b'>
 				<Button color='success' variant='contained' onClick={onSubmit} disabled={disabled}>
 					Guardar
 				</Button>
