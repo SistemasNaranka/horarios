@@ -1,1 +1,1 @@
-# horarios
+# Registro de horarios
