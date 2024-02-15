@@ -48,6 +48,9 @@ export const employeesLocationQuery = location => ({
 					tienda: {
 						_eq: location,
 					},
+					estado: {
+						_eq: 'Activo',
+					},
 				},
 			}),
 		),
