@@ -12,6 +12,7 @@ import { meshRangeQuery } from '../clients/mesh.client';
 import { useLayoutEffect } from 'react';
 import Loading from '../components/utils/Loading';
 import WeekCalendar from '../components/calendars/WeekCalendar';
+import ShiftsTable from '../components/tables/ShiftsTable';
 
 const daysForWeekList = [...Array(7).keys()];
 
@@ -91,7 +92,11 @@ function MeshWeek() {
 					</Button>
 				</div>
 			</div>
-			<WeekCalendar days={days} holidays={holidays} day={day} data={queryResult[0].data} />
+			<div className='flex flex-col gap-4'>
+				<ShiftsTable />
+
+				<WeekCalendar days={days} holidays={holidays} day={day} data={queryResult[0].data} />
+			</div>
 		</main>
 	);
 }

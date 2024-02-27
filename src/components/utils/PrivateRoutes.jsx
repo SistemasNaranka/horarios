@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { client } from '../../clients/client';
 
 /**
@@ -12,7 +12,7 @@ const PrivateRoutes = ({ children }) => {
 	const navigate = useNavigate();
 	const [component, setComponent] = useState(null);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		client.getToken().then(res => (res ? setComponent(children) : navigate('/')));
 	}, [children, navigate]);
 

@@ -33,5 +33,4 @@ COPY --from=builder /app/dist .
 ENTRYPOINT ["nginx","-g", "daemon off;"]
 
 # For build: sudo docker build -t container_name .
-# For run:  sudo docker run --rm -it -p 8080:80 container_name  
-# For run deploy:  sudo docker run -d --name horarios  --restart unless-stopped -it -p 8180:80 container_name
+# For run deploy:  sudo docker run -d --name container_name --restart unless-stopped -it -p 8180:80 container_name

@@ -15,39 +15,3 @@ export const client = createDirectus(HOST_ENV)
 export const signIn = async data => {
 	return await client.login(data.email, data.password, { mode: 'json' });
 };
-
-/**
- * Return employees in the store
- * @returns
- */
-export const getEmployees = async () =>
-	await client.request(
-		readItems('empleados', {
-			fields: ['nombre', 'id'],
-			sort: 'nombre',
-		}),
-	);
-
-/**
- * Return employees in one store
- * @returns
- */
-export const getEmployeesLocation = async location =>
-	await client.request(
-		readItems('empleados', {
-			fields: ['nombre', 'id'],
-			sort: 'nombre',
-			filter: {
-				tienda: {
-					_eq: location,
-				},
-			},
-		}),
-	);
-
-/**
- * Return all locations
- * @returns
- */
-export const getLocations = async () =>
-	await client.request(readItems('lugares', { fields: ['id'] }));

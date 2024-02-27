@@ -2,7 +2,7 @@ import { Button, Paper, TextField } from '@mui/material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import suspendAlert from '../components/alerts/SuspendAlert';
 import SignInAlert from '../components/alerts/SignInAlert';
 import { SignInSchema } from '../schemas/signInSchema';
@@ -27,7 +27,7 @@ const SignIn = () => {
 				err.errors[0].extensions.code === 'USER_SUSPENDED' ? suspendAlert() : SignInAlert(),
 			);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		client.getToken().then(result => (result ? navigate(HOME_PATH) : null));
 	}, [navigate]);
 
