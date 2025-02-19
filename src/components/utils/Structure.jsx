@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
-import { lazy, useEffect } from 'react';
+import { lazy, useEffect, useMemo } from 'react';
 import { eventsQuery, roleQuery, shiftQuery } from '../../clients/aux.client';
 import { eventStore } from '../../stores/eventStore';
 import { shiftStore } from '../../stores/shiftStore';
@@ -23,27 +23,47 @@ function Structure() {
 
 	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);
 
+	const roleData = queryResults[0].data;
+	const shiftsData = queryResults[2].data;
+
+	const filteredShifts = useMemo(() => {
+		if (!roleData || !shiftsData) return [];
+
+		const ubicacionUsuario = Number(roleData.ubicacion);
+
+		if (roleData.role.name === 'almacenes' || roleData.role.name === 'test') {
+			return shiftsData.filter(shift => {
+				return Number(shift.ubicacion.id) === ubicacionUsuario;
+			});
+		}
+
+		return shiftsData;
+	}, [roleData, shiftsData]);
+
 	useEffect(() => {
-		if (queryResults[0].data) {
-			setRole(queryResults[0].data);
+		if (roleData) {
+			setRole(roleData);
 		}
 		if (queryResults[1].data) {
 			setEvents(queryResults[1].data);
 		}
-		if (queryResults[2].data) {
-			setShifts(queryResults[2].data);
+
+		if (roleData && (roleData.role.name === 'almacenes' || roleData.role.name === 'test')) {
+			setShifts(filteredShifts);
+		} else if (shiftsData) {
+			setShifts(shiftsData);
 		}
-	}, [queryResults, setRole, setEvents, setShifts]);
+	}, [roleData, queryResults, setRole, setEvents, setShifts, shiftsData, filteredShifts]);
 
 	if (isLoading) return <Loading />;
 
 	return (
 		<>
 			<Header refetch={refetch} />
-			{queryResults[0].data.role.name === 'almacenes' ? (
-				<StructureRoutes location={queryResults[0].data.ubicacion} />
+			{roleData.role.name === 'almacenes' || roleData.role.name === 'test' ? (
+				<StructureRoutes location={roleData.ubicacion} />
 			) : (
-				<StructureRoutesCom location={queryResults[0].data.ubicacion} />
+				<StructureRoutesCom location={roleData.ubicacion} />
 			)}
 		</>
 	);

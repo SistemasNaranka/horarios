@@ -80,6 +80,7 @@ const RegButton = ({ disabled, handleNext, text = '', data, employee }) => {
 				id={curData.id}
 				review={curData?.observaciones || null}
 				getReview={getReview}
+				name={employee.nombre}
 			/>
 		</div>
 	);

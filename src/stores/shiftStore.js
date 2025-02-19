@@ -6,13 +6,17 @@ export const shiftStore = create(set => ({
 	shiftsMap: new Map(),
 	stringShifts: [],
 	setShifts: data => {
-		const shifts = data.map(shift => ({
-			...shift,
-			inicio_turno: dayjs(`1/1/1 ${shift.inicio_turno}`).format('hh:mmA'),
-			final_turno: dayjs(`1/1/1 ${shift.final_turno}`).format('hh:mmA'),
+		const shifts = data.map(item => ({
+			turno: {
+				...item.turno,
+				inicio_turno: dayjs(`1/1/1 ${item.turno.inicio_turno}`).format('hh:mmA'),
+				final_turno: dayjs(`1/1/1 ${item.turno.final_turno}`).format('hh:mmA'),
+			},
+			ubicacion: item.ubicacion,
 		}));
-		const stringShifts = shifts.map(item => shiftToString(item));
-		const shiftsMap = new Map(stringShifts.map((v, i) => [shifts[i].id, v]));
+
+		const stringShifts = shifts.map(item => shiftToString(item.turno));
+		const shiftsMap = new Map(stringShifts.map((v, i) => [shifts[i].turno.id, v]));
 		set(() => ({ shifts, stringShifts, shiftsMap }));
 	},
 }));

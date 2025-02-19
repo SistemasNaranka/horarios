@@ -2,7 +2,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { employeeStore } from '../../stores/employeeStore';
 import { daysName } from '../../utils/constants';
 import { setColorWeek } from '../../utils/functions';
-import MonthRow from '../rows/MonthRow';
 import WeekInputRow from '../rows/WeekInputRow';
 import TableHis from '../tables/TableHis';
 
@@ -19,7 +18,7 @@ const titles = ['Nombre', ...daysName, ''];
  */
 function WeekCalendar({ days, day, holidays, data }) {
 	const employees = employeeStore(state => state.employees);
-	const { getValues, control } = useForm({
+	const { getValues, control, setValue } = useForm({
 		defaultValues: {
 			mesh: employees.map(e => ({
 				...days.reduce((a, v) => {
@@ -35,12 +34,12 @@ function WeekCalendar({ days, day, holidays, data }) {
 	return (
 		<TableHis titles={titles} center h={60}>
 			<tr>
-				<td className='py-3 px-2 text-xl whitespace-nowrap border-r border-b font-medium'>
+				<td className='py-3 px-2 text-xl whitespace-nowrap border-2 border-gray-300 font-medium'>
 					{`Semana ${days[0].week()}`}
 				</td>
 				{days.map(dayItem => (
 					<td
-						className={`py-3 px-2 text-xl whitespace-nowrap border-r border-b font-medium ${setColorWeek(
+						className={`py-3 px-2 text-xl whitespace-nowrap  border-2 border-gray-300 font-medium ${setColorWeek(
 							day,
 							dayItem,
 							holidays,
@@ -50,29 +49,20 @@ function WeekCalendar({ days, day, holidays, data }) {
 						{dayItem.format('YYYY-MM-DD')}
 					</td>
 				))}
-				<td className='py-3 px-2 text-xl whitespace-nowrap border-r border-b font-medium' />
 			</tr>
-			{fields.map((field, i) =>
-				data?.find(value => value.empleado.id === employees[i].id) ? (
-					<MonthRow
-						key={field.id}
-						border
-						days={days}
-						dataEmployee={data.filter(value => value.empleado.id === employees[i].id)}
-						employee={employees[i].nombre}
-					/>
-				) : (
-					<WeekInputRow
-						control={control}
-						i={i}
-						getValues={getValues}
-						key={field.id}
-						daysInWeek={days}
-						name={employees[i].nombre}
-						cc={employees[i].id}
-					/>
-				),
-			)}
+			{fields.map((field, i) => (
+				<WeekInputRow
+					control={control}
+					i={i}
+					getValues={getValues}
+					setValue={setValue}
+					key={field.id}
+					daysInWeek={days}
+					name={employees[i].nombre}
+					cc={employees[i].id}
+					dataEmployee={data?.filter(value => value.empleado.id === employees[i].id)}
+				/>
+			))}
 		</TableHis>
 	);
 }

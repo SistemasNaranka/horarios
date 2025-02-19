@@ -1,24 +1,13 @@
 import { FormControl, FormHelperText, InputLabel, Select } from '@mui/material';
 import { Controller } from 'react-hook-form';
-import { ReactNode } from 'react';
 
-/**
- *
- * @param {Object} props
- * @param {String} props.name
- * @param {String} props.label
- * @param {Control} props.control
- * @param {Boolean} props.disabled
- * @param {ReactNode} props.children
- * @returns
- */
-const SelectInput = ({ name, label, children, control, disabled = false }) => {
+const SelectInput = ({ name, label, children, control, disabled = false, onChange }) => {
 	return (
 		<Controller
 			name={name}
 			control={control}
-			render={({ field: { onChange, value, ref }, fieldState: { error } }) => (
-				<FormControl fullWidth>
+			render={({ field: { onChange: rhfOnChange, value, ref }, fieldState: { error } }) => (
+				<FormControl className='w-full'>
 					<InputLabel htmlFor={name}>{label}</InputLabel>
 					<Select
 						error={error?.message ? true : false}
@@ -31,7 +20,8 @@ const SelectInput = ({ name, label, children, control, disabled = false }) => {
 						label={label}
 						ref={ref}
 						onChange={event => {
-							onChange(event);
+							rhfOnChange(event);
+							if (onChange) onChange(event);
 						}}
 					>
 						{children}

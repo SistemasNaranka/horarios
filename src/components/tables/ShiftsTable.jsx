@@ -8,19 +8,26 @@ const ShiftsTable = () => {
 	const titles = ['Turnos', ...Array.from(Array(stringShifts.length), (_, i) => `Turno ${i + 1}`)];
 
 	return (
-		<TableHis titles={titles} center overy={false}>
-			<tr>
-				<td className='py-1 px-1 whitespace-nowrap border-r' />
-				{stringShifts.map((shift, index) => (
-					<td
-						key={`turno${index}`}
-						className='py-1 px-1 text-sm text-gray-500 whitespace-nowrap border-r'
-					>
-						{shift}
-					</td>
-				))}
-			</tr>
-		</TableHis>
+		<div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+			<TableHis titles={titles} center overy={false}>
+				<tr>
+					<td className='py-1 px-1 whitespace-nowrap border-r' />
+					{stringShifts.map((shift, index) => (
+						<td
+							key={`turno${index}`}
+							className='py-1 px-1 text-base font-semibold text-gray-700 whitespace-nowrap border-r'
+							style={{
+								whiteSpace: 'normal',
+								wordWrap: 'break-word',
+								padding: '1px 20px ',
+							}}
+						>
+							{shift}
+						</td>
+					))}
+				</tr>
+			</TableHis>
+		</div>
 	);
 };
 

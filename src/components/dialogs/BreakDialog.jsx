@@ -54,7 +54,7 @@ const BreakDialog = ({ name = '', open = false, onClose, cc }) => {
 		<Dialog open={open} onClose={onClose}>
 			<DialogTitle>Reporta un evento</DialogTitle>
 			<DialogContent>
-				<DialogContentText>Escoja la novedad presentada para {name}:</DialogContentText>
+				<DialogContentText>Seleccione la novedad presentada para {name}:</DialogContentText>
 				<div className='mt-2 gap-4 w-full'>
 					<SelectInput
 						name='event'

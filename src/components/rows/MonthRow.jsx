@@ -11,15 +11,19 @@ import HtmlTooltip from '../alerts/HtmlTooltip';
  * @param {String} props.employee
  * @param {Array<Dayjs>} props.days
  * @param {Object} props.dataEmployee
+ * @param {Number} props.weekIndex
  * @returns
  */
-function MonthRow({ border = false, dataEmployee, days, employee }) {
+function MonthRow({ border = false, dataEmployee, days, employee, weekIndex }) {
 	const events = eventStore(state => state.events);
 	const shiftsMap = shiftStore(state => state.shiftsMap);
+	const getBackgroundColor = weekIndex => {
+		return weekIndex % 2 === 0 ? '' : 'bg-gray-100';
+	};
 
 	return (
-		<tr className={`hover:bg-gray-100 ${border && 'border-b'}`}>
-			<td className='py-3 px-2 whitespace-nowrap border-r font-semibold text-left font-sans'>
+		<tr className={`${getBackgroundColor(weekIndex)} hover:bg-gray-200 ${border && 'border-b'}`}>
+			<td className='py-3 px-2 whitespace-nowrap border-r-2 border-l-2 border-gray-300 font-semibold text-left font-sans'>
 				{employee}
 			</td>
 			{days.map((day, i) => {
@@ -30,13 +34,16 @@ function MonthRow({ border = false, dataEmployee, days, employee }) {
 				return curRegister ? (
 					news ? (
 						<td
-							className='py-3 px-2 whitespace-nowrap border-r font-sans'
+							className='py-3 px-2 whitespace-nowrap border-r-2 border-l-2 border-gray-300 font-sans text-gray-950 font-semibold'
 							key={dayString + employee}
 						>
 							{events.get(news).nombre}
 						</td>
 					) : (
-						<td className='py-3 px-2 whitespace-nowrap border-r' key={dayString + employee}>
+						<td
+							className='py-4 px-2 whitespace-nowrap border-r-2 border-l-2 border-gray-300 font-sans text-gray-900 font-semibold'
+							key={dayString + employee}
+						>
 							<HtmlTooltip
 								title={
 									<>
@@ -44,12 +51,17 @@ function MonthRow({ border = false, dataEmployee, days, employee }) {
 									</>
 								}
 							>
-								<div>T{shift}</div>
+								<div className='text-gray-700 font-semibold text-base'>
+									{shiftsMap.get(shift)?.split(' ').slice(0, 3).join(' ')}
+								</div>
 							</HtmlTooltip>
 						</td>
 					)
 				) : (
-					<td className='py-3 px-2 whitespace-nowrap border-r' key={dayString + employee}>
+					<td
+						className='py-3 px-2 whitespace-nowrap border-r-2 border-l-2 border-gray-300'
+						key={dayString + employee}
+					>
 						{''}
 					</td>
 				);
@@ -57,4 +69,5 @@ function MonthRow({ border = false, dataEmployee, days, employee }) {
 		</tr>
 	);
 }
+
 export default memo(MonthRow);

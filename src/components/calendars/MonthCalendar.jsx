@@ -25,18 +25,24 @@ function MonthCalendar({
 	weekComponent: WeekComponent,
 	dataWeek,
 }) {
+	const getBackgroundColor = weekIndex => {
+		return weekIndex % 2 === 0 ? '' : 'bg-gray-100';
+	};
+
 	return (
-		<TableHis titles={titles} center overy h={65}>
-			{weeksCalendar.map(week => {
+		<TableHis titles={titles} center overy h={83}>
+			{weeksCalendar.map((week, weekIndex) => {
 				return [
 					<tr
 						key={`row_${week}`}
-						className={dataWeek.employeeWeek[week].length === 0 ? 'border-b' : ''}
+						className={`${getBackgroundColor(weekIndex)} ${
+							dataWeek.employeeWeek[week].length === 0 ? 'border-b' : ''
+						}`}
 					>
-						<td className='border-r w-1/12'>{''}</td>
+						<td className='border-t-2 border-r-2 border-gray-300 border-l-2 w-1/12'>{''}</td>
 						{days.slice(week * 7, week * 7 + 7).map(day => (
 							<td
-								className={`py-3 px-2 whitespace-nowrap border-r font-medium text-3xl w-1/12 ${setColor(
+								className={`py-3 px-3 whitespace-nowrap border-t-2 border-r-2 border-gray-300 font-medium text-3xl w-1/12 ${setColor(
 									curDay,
 									day,
 									holidays,
@@ -47,33 +53,22 @@ function MonthCalendar({
 							</td>
 						))}
 					</tr>,
-					dataWeek.employeeWeek[week].map((employee, index) =>
-						index === dataWeek.employeeWeek[week].length - 1 ? (
-							<WeekComponent
-								border
-								key={`table_${week}-${index}`}
-								employee={employee}
-								days={days.slice(week * 7, week * 7 + 7)}
-								curLocation={curLocation}
-								dataEmployee={dataWeek.dataForWeek[week].filter(
-									value => employee === value.empleado.nombre,
-								)}
-							/>
-						) : (
-							<WeekComponent
-								key={`table_${week}-${index}`}
-								days={days.slice(week * 7, week * 7 + 7)}
-								employee={employee}
-								curLocation={curLocation}
-								dataEmployee={dataWeek.dataForWeek[week].filter(
-									value => employee === value.empleado.nombre,
-								)}
-							/>
-						),
-					),
+					dataWeek.employeeWeek[week].map((employee, index) => (
+						<WeekComponent
+							key={`table_${week}-${index}`}
+							days={days.slice(week * 7, week * 7 + 7)}
+							employee={employee}
+							curLocation={curLocation}
+							dataEmployee={dataWeek.dataForWeek[week].filter(
+								value => employee === value.empleado.nombre,
+							)}
+							weekIndex={weekIndex}
+						/>
+					)),
 				];
 			})}
 		</TableHis>
 	);
 }
+
 export default memo(MonthCalendar);

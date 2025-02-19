@@ -21,5 +21,12 @@ export const PAGES_ROLE = {
 		{ title: 'Historial', id: HISTORY_PATH },
 		{ title: 'Malla Horaria', id: MESH_PATH },
 	],
-	Comercial: [{ title: 'Malla Horaria', id: HOME_PATH }],
+	test: [
+		{ title: 'Registros', id: HOME_PATH },
+		{ title: 'Novedades', id: NEWS_PATH },
+		{ title: 'Historial', id: HISTORY_PATH },
+		{ title: 'Malla Horaria', id: MESH_PATH },
+	],
+
+	Comercial: [{ title: 'principal', id: HOME_PATH }],
 };

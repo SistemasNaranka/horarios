@@ -92,7 +92,7 @@ const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
 		<Dialog open={open} onClose={handleClose} keepMounted={false}>
 			<DialogTitle>Reporta una novedad</DialogTitle>
 			<DialogContent>
-				<DialogContentText>Escoja la novedad presentada para {name}:</DialogContentText>
+				<DialogContentText>Seleccione la novedad presentada para {name}:</DialogContentText>
 				<div className='mt-2 flex flex-col gap-1 w-full'>
 					<SelectInput name='event' label='Novedad' control={control} default={'Compensatorio'}>
 						{events.map(value => (

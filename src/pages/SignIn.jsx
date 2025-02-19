@@ -57,6 +57,7 @@ const SignIn = () => {
 					{...register('password')}
 					helperText={errors.password?.message}
 					error={errors.password ? true : false}
+					autoComplete='current-password'
 				/>
 				<Button variant='contained' type='submit' sx={{ marginTop: '0.5rem' }}>
 					Iniciar sesión

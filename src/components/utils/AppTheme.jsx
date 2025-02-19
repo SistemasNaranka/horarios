@@ -21,6 +21,17 @@ const theme = createTheme({
 			contrastText: '#FFF',
 		},
 	},
+	components: {
+		MuiSelect: {
+			styleOverrides: {
+				select: {
+					whiteSpace: 'normal',
+					maxWidth: 'auto',
+					overflow: 'hidden',
+				},
+			},
+		},
+	},
 });
 
 export default theme;

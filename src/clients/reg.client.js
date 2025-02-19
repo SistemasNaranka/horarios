@@ -25,23 +25,33 @@ export const registersQuery = date => ({
 	enabled: !!date,
 });
 /**
- *
- * Get registers in one date for a store
+ * Get all registers in a date range for a store with pagination
+ * @param {Number} page
+ * @param {String} startDate
+ * @param {String} endDate
+ * @param {String} location
  * @returns
  */
-export const allRegistersQuery = (page, date) => ({
-	queryKey: ['registersStore', page, date],
-	queryFn: async () =>
-		client.request(
+export const allRegistersQuery = (page, startDate, endDate) => ({
+	queryKey: ['registerStores', page, startDate, endDate],
+	queryFn: async () => {
+		return await client.request(
 			readItems(table, {
 				fields: ['id', 'evento', 'fecha', 'hora', 'observaciones', { empleado: ['nombre'] }],
 				sort: ['-fecha', '-hora'],
+				filter: {
+					fecha: {
+						_between: [startDate, endDate],
+					},
+				},
 				limit: limitPage,
-				page: page || 1,
+				page: page,
 			}),
-		),
+		);
+	},
 	refetchOnWindowFocus: false,
 });
+
 /*
  * Create a new register
  * @param {String} event
@@ -71,24 +81,25 @@ export const createReview = async (review, id) =>
 	);
 
 /**
- * @param {String} date
- * @returns number of news
+ * Count the total number of registers for a specific date range and location
+ * @param {String} startDate
+ * @param {String} endDate
+ * @param {String} location
+ * @returns
  */
-export const countRegQuery = date => ({
-	queryKey: ['regCount', date],
+export const countRegQuery = (startDate, endDate) => ({
+	queryKey: ['regCount', startDate, endDate],
 	queryFn: async () =>
 		await client.request(
 			readItems(table, {
 				filter: {
 					fecha: {
-						_lte: date,
-					},
-					hora: {
-						_neq: '23:59:59',
+						_between: [startDate, endDate],
 					},
 				},
 				aggregate: { countDistinct: 'id' },
 			}),
 		),
 	refetchOnWindowFocus: false,
+	enabled: !!location && !!startDate && !!endDate,
 });

@@ -104,9 +104,7 @@ function Mesh() {
 					Crear Malla
 				</Button>
 			</div>
-			<div className='pb-8 mx-auto text-lg text-center'>
-				<ShiftsTable />
-			</div>
+			<div className='pb-2 mx-auto text-lg text-center'>{/* <ShiftsTable /> */}</div>
 			<MonthCalendar
 				key={day.month()}
 				days={days}

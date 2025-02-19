@@ -2,11 +2,13 @@ import PauseCircleFilledIcon from '@mui/icons-material/PauseCircleFilled';
 import { Button, Paper, Tooltip, Typography } from '@mui/material';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { memo, useState } from 'react';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import BreakDialog from '../dialogs/BreakDialog';
 import NewsDialog from '../dialogs/NewsDialog';
 import { events } from '../../utils/constants';
 import RegButton from '../buttons/RegButton';
-
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 /**
  * @param {Object} props
  * @param {Array} props.checks
@@ -48,9 +50,10 @@ const init = data => {
  * @param {Object} props
  * @param {Array} props.checks
  * @param {Function} props.addNews
+ * @param {Boolean} props.hasShift
  * @returns
  */
-const RegCard = ({ data = [], employee, addNews }) => {
+const RegCard = ({ data = [], employee, addNews, hasShift = true }) => {
 	const [check, setChecks] = useState(init(data));
 	const [openNewsDialog, setOpenNewsDialog] = useState(false);
 	const handleOPenNewsDialog = () => setOpenNewsDialog(true);
@@ -59,6 +62,8 @@ const RegCard = ({ data = [], employee, addNews }) => {
 	const [openBreakDialog, setOpenBreakDialog] = useState(false);
 	const handleOpenBreakDialog = () => setOpenBreakDialog(true);
 	const handleCloseBreakDialog = () => setOpenBreakDialog(false);
+
+	const navigate = useNavigate();
 
 	const handleInit = () => {
 		setChecks({ ...check, init: true, lunch: false, news: true, pause: false });
@@ -77,7 +82,7 @@ const RegCard = ({ data = [], employee, addNews }) => {
 	};
 
 	return (
-		<Paper sx={{ width: '30rem', padding: '1rem' }} elevation={3}>
+		<Paper sx={{ width: '30rem', padding: '0.8rem' }} elevation={3}>
 			<div className='flex justify-between mb-2'>
 				<div className='inline-flex gap-2 my-auto'>
 					<Typography variant='h6' sx={{ marginY: 'auto' }}>
@@ -103,7 +108,7 @@ const RegCard = ({ data = [], employee, addNews }) => {
 				<NewsDialog
 					open={openNewsDialog}
 					onClose={handleCloseNewsDialog}
-					name={employee.name}
+					name={employee.nombre}
 					addNews={addNews}
 					cc={employee.id}
 				/>
@@ -115,6 +120,30 @@ const RegCard = ({ data = [], employee, addNews }) => {
 				/>
 			</div>
 			<hr className=' border-themeGrey/30 border-2' />
+			{!hasShift && (
+				<div className='mt-2 text-center'>
+					<div className='flex flex-col items-center justify-center gap-2'>
+						<div className='flex items-center justify-center gap-2'>
+							<Tooltip title='No tiene turno asignado'>
+								<ErrorOutlineIcon color='error' sx={{ marginY: 'auto' }} />
+							</Tooltip>
+							<Typography variant='body1' color='textSecondary' sx={{ fontWeight: 'bold' }}>
+								Este empleado no tiene turno asignado para hoy.
+							</Typography>
+						</div>
+						<Link
+							to='/home/week'
+							style={{
+								textDecoration: 'underline',
+								color: '#007bff',
+								cursor: 'pointer',
+							}}
+						>
+							Asignar turno
+						</Link>
+					</div>
+				</div>
+			)}
 			<div className='flex flex-col justify-center align-middle mt-2 gap-4'>
 				<RegButton
 					employee={employee}
