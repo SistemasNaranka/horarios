@@ -159,6 +159,8 @@ const History = () => {
 
 					<div className='custom-select-wrapper'>
 						<select
+							id='dateRange'
+							name='dateRange'
 							value={isDateRangeCustom ? '' : dateRange}
 							onChange={handleDateRangeChange}
 							className='custom-select'
@@ -183,6 +185,8 @@ const History = () => {
 
 						<div className='relative'>
 							<DatePicker
+								id='startDate'
+								name='starDate'
 								selected={customStartDate}
 								onChange={handleStartDateChange}
 								minDate={new Date('2021-02-01')}
@@ -211,6 +215,8 @@ const History = () => {
 						</label>
 						<div className='relative'>
 							<DatePicker
+								id='endDate'
+								name='endDate'
 								selected={customEndDate}
 								onChange={handleEndDateChange}
 								locale='es'
