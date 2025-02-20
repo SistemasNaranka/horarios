@@ -34,7 +34,6 @@ function ComRow({ border = false, dataEmployee, days, employee, curLocation, wee
 				}
 				return item;
 			});
-			console.log(filterData);
 			setData(filterData);
 		}
 		setOpen(false);
