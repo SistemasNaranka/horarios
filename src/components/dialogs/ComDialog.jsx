@@ -94,7 +94,7 @@ function ComDialog({ open, data, days, employee, handleClose, curLocation }) {
 	};
 
 	return (
-		<Dialog open={open} onClose={() => handleClose()} maxWidth='xl'>
+		<Dialog open={open} onClose={() => handleClose()} maxWidth={false}>
 			<DialogTitle>Modificar turnos: {employee}</DialogTitle>
 			<DialogContent className='text-center w-auto'>
 				<TableHis titles={daysName} center overy={true}>
