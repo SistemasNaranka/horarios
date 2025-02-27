@@ -32,7 +32,7 @@ function WeekCalendar({ days, day, holidays, data }) {
 	const { fields } = useFieldArray({ control: control, name: 'mesh' });
 
 	return (
-		<TableHis titles={titles} center h={60}>
+		<TableHis titles={titles} center h={false}>
 			<tr>
 				<td className='py-3 px-2 text-xl whitespace-nowrap border-2 border-gray-300 font-medium'>
 					{`Semana ${days[0].week()}`}
