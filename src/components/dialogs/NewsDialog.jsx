@@ -20,6 +20,7 @@ import { roleStore } from '../../stores/roleStore';
 import successAlert from '../alerts/SuccessAlert';
 import SelectInput from '../inputs/SelectInput';
 import errorAlert from '../alerts/ErrorAlert';
+import useConnectionStore from '../../stores/connectionStore';
 
 const today = dayjs();
 
@@ -36,6 +37,7 @@ const today = dayjs();
 const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
 	const location = roleStore(state => state.location);
 	const events = eventStore(state => state.eventsList);
+	const { isOnline } = useConnectionStore();
 	const {
 		register,
 		handleSubmit,
@@ -50,36 +52,43 @@ const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
 		},
 	});
 
-	const onSubmit = data => {
+	const onSubmit = async data => {
 		onClose();
 		const list = [];
 		const todayDate = today.format('YYYY-MM-DD');
 		const lastDate = data.time.format('YYYY-MM-DD');
-		for (let index = 0; index < data.time.diff(today, 'day', true) + 1; index++) {
-			list.push({
-				empleado: cc,
-				novedad: data.event,
-				fecha: today.add(index, 'day').format('YYYY-MM-DD'),
-				tienda: location,
-				...(data.review && { observaciones: data.review }),
-			});
+
+		try {
+			for (let index = 0; index < data.time.diff(today, 'day', true) + 1; index++) {
+				const fecha = today.add(index, 'day').format('YYYY-MM-DD');
+
+				const novedadData = {
+					empleado: {
+						id: cc,
+						nombre: name,
+					},
+					novedad: data.event,
+					fecha,
+					tienda: location,
+					turno: null,
+					...(data.review && { observaciones: data.review }),
+				};
+
+				list.push(novedadData);
+			}
+
+			await removeMeshQuery(todayDate, lastDate, cc);
+			await Promise.all(list.map(createMeshList));
+
+			successAlert();
+			addNews(cc);
+		} catch (error) {
+			errorAlert('Hubo error guardando la novedad');
+			console.error('Error:', error);
+		} finally {
+			reset({ time: today, event: 1 });
 		}
-
-		removeMeshQuery(todayDate, lastDate, cc)
-			.then(res => createMeshList(list))
-			.then(() => {
-				addNews(cc);
-				successAlert();
-			})
-			.catch(e => errorAlert('Hubo error guardando la novedad'))
-			.finally(() =>
-				reset({
-					time: today,
-					event: 1,
-				}),
-			);
 	};
-
 	const handleClose = () => {
 		onClose();
 		reset({

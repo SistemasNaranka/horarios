@@ -34,7 +34,7 @@ const News = () => {
 	const events = eventStore(state => state.events);
 
 	const today = dayjs().format('YYYY-MM-DD');
-	const locationKey = location ? location.toString() : '';
+	const locationKey = location;
 
 	const handleDateRangeChange = event => {
 		setDateRange(event.target.value);
