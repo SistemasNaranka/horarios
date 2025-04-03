@@ -1,8 +1,5 @@
-// src/utils/localDB.js
-
 import Dexie from 'dexie';
 
-// Crear una base de datos local con Dexie
 const db = new Dexie('LocalDB');
 db.version(2)
 	.stores({
@@ -13,10 +10,9 @@ db.version(2)
 		registros: 'id, evento, fecha, hora, observaciones, empleado, tienda, syncPending',
 	})
 	.upgrade(trans => {
-		// Migración: agregar syncPending a los registros existentes
 		return trans.registros.toCollection().modify(registro => {
 			if (registro.syncPending === undefined) {
-				registro.syncPending = false; // Valor predeterminado
+				registro.syncPending = false;
 			}
 		});
 	});

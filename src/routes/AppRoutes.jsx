@@ -17,7 +17,7 @@ function AppRoutes() {
 		const initializeApp = async () => {
 			try {
 				if (isOnline) {
-					await syncCriticalData(); // Sincronizar registros pendientes primero
+					await syncCriticalData();
 				}
 			} catch (error) {
 				console.error('Error en sincronizacion critica:', error);
@@ -27,29 +27,24 @@ function AppRoutes() {
 		initializeApp();
 	}, [isOnline]);
 
-	// Comienza a verificar la conexión de forma periódica
 	useEffect(() => {
-		const stopConnectionCheck = startConnectionCheck(); // Verificar la conexión periódicamente.
+		const stopConnectionCheck = startConnectionCheck();
+		checkConnectionImmediately();
 
-		// Al principio, realizamos una verificación inmediata de la conexión al montar la app
-		checkConnectionImmediately(); // Verificación inicial.
-
-		// Detener la verificación cuando la aplicación se desmonta
 		return () => stopConnectionCheck();
 	}, [startConnectionCheck, checkConnectionImmediately]);
 
-	// Sincronización periódica cada 60 segundos (otros datos)
 	useEffect(() => {
 		const intervalId = setInterval(async () => {
 			try {
 				if (isOnline) {
-					await syncNonCriticalData(); // Sincronizar otros datos en segundo plano
+					await syncNonCriticalData();
 					await syncUsers();
 				}
 			} catch (error) {
 				console.error('Error durante la sincronización periódica:', error);
 			}
-		}, 40000); // 40 segundos
+		}, 40000);
 
 		return () => clearInterval(intervalId);
 	}, [isOnline]);

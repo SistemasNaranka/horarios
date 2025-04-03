@@ -27,7 +27,6 @@ export const registersQuery = date => ({
 			);
 		}
 
-		// Modo offline: usar la base de datos local
 		return await db.registros.where('fecha').equals(date).toArray();
 	},
 	refetchOnWindowFocus: false,
@@ -47,8 +46,6 @@ export const allRegistersQuery = (page, startDate, endDate, location) => ({
 		const { isOnline } = useConnectionStore.getState();
 
 		if (isOnline) {
-			// // Modo online: usar Directus
-			// console.log('all register query es usado Tabla registros (Directus)');
 			return await client.request(
 				readItems(table, {
 					fields: ['id', 'evento', 'fecha', 'hora', 'observaciones', { empleado: ['nombre'] }],
@@ -63,18 +60,16 @@ export const allRegistersQuery = (page, startDate, endDate, location) => ({
 				}),
 			);
 		}
-		// Modo offline: usar la base de datos local (IndexedDB)
+
 		const empleados = await db.empleados.where('tienda').equals(location).toArray();
 		const empleadosIds = empleados.map(empleado => empleado.id);
 
-		// Filtrar registros por IDs de empleados y rango de fechas
 		const registros = await db.registros
 			.where('fecha')
-			.between(startDate, endDate, true, true) // Filtrar por rango de fechas
-			.filter(registro => empleadosIds.includes(registro.empleado.id)) // Filtrar por IDs de empleados
-			.sortBy('fecha'); // Ordenar por fecha
+			.between(startDate, endDate, true, true)
+			.filter(registro => empleadosIds.includes(registro.empleado.id))
+			.sortBy('fecha');
 
-		// Paginación manual
 		const startIndex = (page - 1) * limitPage;
 		const endIndex = startIndex + limitPage;
 		const paginatedRegistros = registros.slice(startIndex, endIndex);
@@ -96,37 +91,29 @@ export const createRegister = async data => {
 	const { isOnline } = useConnectionStore.getState();
 
 	if (isOnline) {
-		// Modo online: guardar en Directus
 		try {
 			const result = await client.request(createItem(table, data, { fields: ['id'] }));
-			// console.log('Registro creado en Directus:', result);
+
 			return result;
-		} catch (error) {
-			// console.error('Error creando registro en Directus:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	} else {
-		// Modo offline: guardar en la base de datos local
 		try {
-			const id = Date.now().toString(); // Generar un ID temporal
+			const id = Date.now().toString();
 			const registro = {
 				...data,
 				id,
-				fecha: dayjs().format('YYYY-MM-DD'), // Fecha actual
-				hora: dayjs().format('HH:mm:ss'), // Hora actual
-				syncPending: true, // Marcar como pendiente de sincronización
+				fecha: dayjs().format('YYYY-MM-DD'),
+				hora: dayjs().format('HH:mm:ss'),
+				syncPending: true,
 				empleado: {
-					id: data.empleado.id, // ID del empleado
-					nombre: data.empleado.nombre, // Nombre del empleado
+					id: data.empleado.id,
+					nombre: data.empleado.nombre,
 				},
 			};
 			await db.registros.add(registro);
-			// console.log('Registro guardado localmente:', registro);
+
 			return { id };
-		} catch (error) {
-			// console.error('Error guardando registro localmente:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	}
 };
 /**
@@ -139,7 +126,6 @@ export const createReview = async (review, id) => {
 	const { isOnline } = useConnectionStore.getState();
 
 	if (isOnline) {
-		// Modo online: actualizar en Directus
 		try {
 			const result = await client.request(
 				updateItem(
@@ -151,25 +137,19 @@ export const createReview = async (review, id) => {
 					{ fields: ['id'] },
 				),
 			);
-			// console.log('Observación actualizada en Directus:', result);
+
 			return result;
-		} catch (error) {
-			// console.error('Error actualizando observación en Directus:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	} else {
-		// Modo offline: actualizar en la base de datos local
 		try {
 			await db.registros.update(id, {
 				observaciones: review,
-				syncPending: true, // Marcar como pendiente de sincronización
+				syncPending: true,
+				n,
 			});
 			console.log('Observación guardada localmente:', id);
 			return { id };
-		} catch (error) {
-			// console.error('Error guardando observación localmente:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	}
 };
 /**
@@ -185,8 +165,6 @@ export const countRegQuery = (startDate, endDate, location) => ({
 		const { isOnline } = useConnectionStore.getState();
 
 		if (isOnline) {
-			// Modo online: usar Directus
-			// console.log('count reg query es usado Tabla registros (Directus)');
 			return await client.request(
 				readItems(table, {
 					filter: {
@@ -198,14 +176,13 @@ export const countRegQuery = (startDate, endDate, location) => ({
 				}),
 			);
 		}
-		// Modo offline: usar la base de datos local (IndexedDB)
-		// console.log('count reg query es usado Tabla registros (IndexedDB)');
+
 		const registros = await db.registros
 			.where('fecha')
-			.between(startDate, endDate, true, true) // Filtrar por rango de fechas
+			.between(startDate, endDate, true, true)
 			.toArray();
 
-		return { data: [{ count: { id: registros.length } }] }; // Simular la respuesta de Directus
+		return { data: [{ count: { id: registros.length } }] };
 	},
 	refetchOnWindowFocus: false,
 	enabled: !!startDate && !!endDate,

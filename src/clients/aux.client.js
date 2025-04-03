@@ -10,29 +10,24 @@ import useConnectionStore from '../stores/connectionStore';
 export const roleQuery = () => ({
 	queryKey: ['role'],
 	queryFn: async () => {
-		const { isOnline } = useConnectionStore.getState(); // Obtener el estado de la conexión
-		// console.log('valor de online de role query', isOnline);
+		const { isOnline } = useConnectionStore.getState();
+
 		if (isOnline) {
-			// Modo online: usar Directus
 			const result = await client.request(readMe({ fields: [{ role: ['name'] }, 'ubicacion'] }));
-			// console.log('roleQuery es usado (modo online)', result);
+
 			return result;
 		}
 
-		// Modo offline: usar la base de datos local
 		const localAuth = JSON.parse(localStorage.getItem('localAuth'));
 		if (localAuth) {
 			const user = await db.users.get({ email: localAuth.email });
 			if (user) {
 				const role = user.role.name;
 				const ubicacion = user.ubicacion;
-				// console.log('roleQuery es usado (modo offline)', { role, ubicacion });
+
 				return { role: { name: role }, ubicacion };
 			}
 		}
-
-		// Si no hay autenticación local o el usuario no se encuentra
-		// throw new Error('No hay autenticación local o el usuario no fue encontrado');
 	},
 	refetchOnWindowFocus: false,
 });
@@ -52,7 +47,7 @@ const getActiveShifts = async () => {
 			},
 		}),
 	);
-	// console.log('turnos activos es usado');
+
 	return activeShifts.map(shift => shift.id);
 };
 
@@ -63,12 +58,10 @@ const getActiveShifts = async () => {
 export const shiftQuery = () => ({
 	queryKey: ['shifts'],
 	queryFn: async () => {
-		const { isOnline } = useConnectionStore.getState(); // Obtener el estado de la conexión
-		// console.log('valor de online de shifts query', isOnline);
+		const { isOnline } = useConnectionStore.getState();
 		if (isOnline) {
-			// Modo online: usar Directus
 			const activeShiftIds = await getActiveShifts();
-			// console.log('turnos query es usado (modo online)');
+
 			return await client.request(
 				readItems('turnos_ubicaciones', {
 					fields: [
@@ -93,9 +86,8 @@ export const shiftQuery = () => ({
 				}),
 			);
 		}
-		// Modo offline: no hacer nada o devolver un valor predeterminado
-		// console.log('turnos query no se usa en modo offline');
-		return []; // Devuelve un array vacío o lanza un error
+
+		return [];
 	},
 	refetchOnWindowFocus: false,
 });
@@ -106,13 +98,11 @@ export const shiftQuery = () => ({
  */
 
 export const employeesLocationQuery = location => ({
-	queryKey: ['employees', location], // Incluir la ubicación en la clave de la consulta
+	queryKey: ['employees', location],
 	queryFn: async () => {
-		const { isOnline } = useConnectionStore.getState(); // Obtener el estado de la conexión
-		// console.log('empleados ubicacion query es usado. Modo:', isOnline ? 'online' : 'offline');
+		const { isOnline } = useConnectionStore.getState();
 
 		if (isOnline) {
-			// Modo online: usar Directus
 			return await client.request(
 				readItems('empleados', {
 					fields: ['id', 'nombre', 'tienda', 'estado'],
@@ -125,18 +115,16 @@ export const employeesLocationQuery = location => ({
 			);
 		}
 
-		// Modo offline: usar la base de datos local
 		const empleados = await db.empleados
 			.where('tienda')
 			.equals(location)
 			.and(empleado => empleado.estado === 'Activo')
 			.toArray();
 
-		// console.log('Empleados obtenidos de la base de datos local:', empleados);
 		return empleados;
 	},
 	refetchOnWindowFocus: false,
-	enabled: !!location, // Solo ejecutar la consulta si hay una ubicación válida
+	enabled: !!location,
 });
 
 /**
@@ -146,18 +134,13 @@ export const employeesLocationQuery = location => ({
 export const eventsQuery = () => ({
 	queryKey: ['events'],
 	queryFn: async () => {
-		const { isOnline } = useConnectionStore.getState(); // Obtener el estado de la conexión
-		// console.log('valor de online de eventsquery query', isOnline);
+		const { isOnline } = useConnectionStore.getState();
 		if (isOnline) {
-			// Modo online: usar Directus
-			// console.log('evento query es usado (modo online)');
 			return await client.request(
 				readItems('eventos', { fields: ['nombre', 'id'], sort: 'nombre' }),
 			);
 		}
 
-		// Modo offline: usar la base de datos local
-		// console.log('evento query es usado (modo offline)');
 		return await db.eventos.toArray();
 	},
 });

@@ -34,7 +34,6 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 			);
 		}
 
-		// Modo offline: usar la base de datos local
 		return await db.malla
 			.where('fecha')
 			.between(startDate, endDate, true, true)
@@ -60,7 +59,6 @@ export const RangeDate = (startDate, endDate, location, page = 1, limit = 10) =>
 		const { isOnline } = useConnectionStore.getState();
 
 		if (isOnline) {
-			// Modo online: usar Directus
 			return await client.request(
 				readItems(mesh, {
 					fields: [
@@ -89,14 +87,12 @@ export const RangeDate = (startDate, endDate, location, page = 1, limit = 10) =>
 			);
 		}
 
-		// Modo offline: usar la base de datos local
 		const news = await db.malla
 			.where('fecha')
 			.between(startDate, endDate, true, true)
 			.filter(item => item.tienda === location && item.novedad !== null)
 			.sortBy('fecha');
 
-		// Paginación manual
 		const startIndex = (page - 1) * limit;
 		const endIndex = startIndex + limit;
 		return news.slice(startIndex, endIndex);
@@ -147,7 +143,6 @@ export const countNewsQuery = (startDate, endDate, location) => ({
 		const { isOnline } = useConnectionStore.getState();
 
 		if (isOnline) {
-			// Modo online: usar Directus
 			return await client.request(
 				readItems(mesh, {
 					filter: {
@@ -166,7 +161,6 @@ export const countNewsQuery = (startDate, endDate, location) => ({
 			);
 		}
 
-		// Modo offline: usar la base de datos local
 		const newsCount = await db.malla
 			.where('fecha')
 			.between(startDate, endDate, true, true)
@@ -182,14 +176,10 @@ export const createMeshList = async data => {
 	const { isOnline } = useConnectionStore.getState();
 
 	if (isOnline) {
-		// Modo online: guardar en Directus
 		try {
 			const result = await client.request(createItem(mesh, data, { fields: ['id'] }));
 			return result;
-		} catch (error) {
-			// console.error('Error creando novedad en Directus:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	} else {
 		try {
 			const id = Date.now().toString();
@@ -208,24 +198,19 @@ export const createMeshList = async data => {
 			};
 
 			await db.malla.add(novedad);
-			// console.log('Novedad guardada localmente:', novedad);
+
 			return { id };
-		} catch (error) {
-			// console.error('Error guardando novedad localmente:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	}
 };
 
 export const updateMesh = async (id, data) =>
 	await client.request(updateItem(mesh, id, data, { fields: ['id'] }));
-// console.log('update mesh query  es usado Tabla malla');
 
 export const removeMeshQuery = async (startDate, endDate, cc) => {
 	const { isOnline } = useConnectionStore.getState();
 
 	if (isOnline) {
-		// Modo online: eliminar en Directus
 		try {
 			await client.request(
 				deleteItems('malla', {
@@ -239,23 +224,14 @@ export const removeMeshQuery = async (startDate, endDate, cc) => {
 					},
 				}),
 			);
-			// console.log('Novedades eliminadas en Directus.');
-		} catch (error) {
-			// console.error('Error eliminando novedades en Directus:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	} else {
-		// Modo offline: eliminar en IndexedDB
 		try {
 			await db.malla
 				.where('fecha')
 				.between(startDate, endDate, true, true)
 				.filter(item => item.empleado === cc)
 				.delete();
-			// console.log('Novedades eliminadas localmente.');
-		} catch (error) {
-			// console.error('Error eliminando novedades localmente:', error);
-			// throw error;
-		}
+		} catch (error) {}
 	}
 };

@@ -41,7 +41,6 @@ const SignIn = () => {
 			// Redirigir a la página principal
 			navigate(HOME_PATH);
 		} catch (err) {
-			console.error('Error durante el inicio de sesión:', err);
 			if (err.message === 'Credenciales incorrectas o usuario no registrado localmente.') {
 				SignInAlert();
 			} else if (err.errors?.[0]?.extensions?.code === 'USER_SUSPENDED') {
