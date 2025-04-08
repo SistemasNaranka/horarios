@@ -8,7 +8,7 @@ import successAlert from '../alerts/SuccessAlert';
 import SelectInput from '../inputs/SelectInput';
 import dayjs from 'dayjs';
 import errorAlert from '../alerts/ErrorAlert';
-
+import useConnectionStore from '../../stores/connectionStore';
 function WeekInputRow({
 	daysInWeek,
 	name = '',
@@ -24,7 +24,7 @@ function WeekInputRow({
 	const eventsList = eventStore(state => state.eventsList);
 	const shiftsMap = shiftStore(state => state.shiftsMap);
 	const events = eventStore(state => state.events);
-
+	const { isOnline } = useConnectionStore();
 	const [allDaysFilled, setAllDaysFilled] = useState(false);
 	const [localUpdates, setLocalUpdates] = useState([]);
 
@@ -63,18 +63,19 @@ function WeekInputRow({
 		const mesh = values.reduce((a, [fecha, valor]) => {
 			if ((typeof valor === 'string' && valor.length > 0) || valor > 0) {
 				a.push({
-					empleado: cc,
+					empleado: isOnline ? cc : { id: cc, nombre: name },
 					fecha,
 					tienda: location,
 					...(typeof valor === 'number' && { turno: valor }),
 					...(typeof valor === 'string' && { novedad: Number(valor.slice(1)) }),
+					observaciones: null,
 				});
 			}
 			return a;
 		}, []);
 
 		if (mesh.length > 0) {
-			createMeshList(mesh)
+			Promise.all(mesh.map(item => createMeshList(item)))
 				.then(() => {
 					successAlert();
 					setLocalUpdates(prev => [...prev, ...mesh]);

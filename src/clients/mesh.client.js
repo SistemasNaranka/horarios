@@ -179,7 +179,9 @@ export const createMeshList = async data => {
 		try {
 			const result = await client.request(createItem(mesh, data, { fields: ['id'] }));
 			return result;
-		} catch (error) {}
+		} catch (error) {
+			console.error('Error creating mesh:', error);
+		}
 	} else {
 		try {
 			const id = Date.now().toString();
@@ -200,7 +202,9 @@ export const createMeshList = async data => {
 			await db.malla.add(novedad);
 
 			return { id };
-		} catch (error) {}
+		} catch (error) {
+			console.error('Error creating mesh:', error);
+		}
 	}
 };
 

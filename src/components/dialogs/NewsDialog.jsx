@@ -63,10 +63,7 @@ const NewsDialog = ({ name = '', open = false, onClose, addNews, cc }) => {
 				const fecha = today.add(index, 'day').format('YYYY-MM-DD');
 
 				const novedadData = {
-					empleado: {
-						id: cc,
-						nombre: name,
-					},
+					empleado: isOnline ? cc : { id: cc, nombre: name },
 					novedad: data.event,
 					fecha,
 					tienda: location,

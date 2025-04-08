@@ -19,22 +19,34 @@ export const client = createDirectus(HOST_ENV)
 export const signIn = async data => {
 	const { isOnline } = useConnectionStore.getState();
 
-	if (isOnline) {
-		try {
-			const response = await client.login(data.email, data.password, { mode: 'json' });
-			return response;
-		} catch (error) {}
-	} else {
-		const user = await db.users.get({ email: data.email });
-
-		if (user) {
-			const passwordMatch = await bcrypt.compare(data.password, user.password);
-
-			if (passwordMatch) {
-				localStorage.setItem('localAuth', JSON.stringify({ email: user.email, role: user.role }));
-
-				return { localStorage };
+	try {
+		if (isOnline) {
+			try {
+				const response = await client.login(data.email, data.password, { mode: 'json' });
+				return response;
+			} catch (error) {
+				if (error.errors?.[0]?.extensions?.code === 'USER_SUSPENDED') {
+					throw new Error('USER_SUSPENDED');
+				}
+				throw new Error('Credenciales incorrectas');
 			}
+		} else {
+			const user = await db.users.get({ email: data.email });
+
+			if (!user) {
+				throw new Error('Credenciales incorrectas o usuario no registrado localmente.');
+			}
+
+			const passwordMatch = await bcrypt.compare(data.password, user.password);
+			if (!passwordMatch) {
+				throw new Error('Credenciales incorrectas o usuario no registrado localmente.');
+			}
+
+			localStorage.setItem('localAuth', JSON.stringify({ email: user.email, role: user.role }));
+			return { email: user.email, role: user.role };
 		}
+	} catch (error) {
+		console.error('Error en signIn:', error);
+		throw error;
 	}
 };

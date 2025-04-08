@@ -27,28 +27,26 @@ const SignIn = () => {
 
 	const onSubmit = async data => {
 		try {
-			// Verificar conexión primero
 			await checkConnectionImmediately();
-
-			// Autenticar usuario
-			const response = await signIn(data);
+			await signIn(data);
 			setIsLoading(true);
-			// Sincronizar datos críticos si hay conexión
 			if (isOnline) {
 				await syncCriticalData();
 			}
-			setIsLoading(false);
-			// Redirigir a la página principal
+
 			navigate(HOME_PATH);
 		} catch (err) {
-			if (err.message === 'Credenciales incorrectas o usuario no registrado localmente.') {
-				SignInAlert();
-			} else if (err.errors?.[0]?.extensions?.code === 'USER_SUSPENDED') {
+			console.error('Error en onSubmit:', err);
+
+			if (err.message === 'USER_SUSPENDED') {
 				suspendAlert();
+			} else if (err.message.includes('Credenciales incorrectas')) {
+				SignInAlert();
 			} else {
 				SignInAlert();
 			}
 		} finally {
+			setIsLoading(false);
 		}
 	};
 

@@ -145,7 +145,6 @@ export const createReview = async (review, id) => {
 			await db.registros.update(id, {
 				observaciones: review,
 				syncPending: true,
-				n,
 			});
 			console.log('Observación guardada localmente:', id);
 			return { id };
