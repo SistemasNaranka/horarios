@@ -3,6 +3,8 @@ import { createDirectus, rest, authentication } from '@directus/sdk';
 import { memoryStorage } from '../utils/storage';
 import { HOST_ENV } from '../utils/env';
 import db from '../utils/localDB';
+import suspendAlert from '../components/alerts/SuspendAlert';
+import SignInAlert from '../components/alerts/SignInAlert';
 import bcrypt from 'bcryptjs';
 import useConnectionStore from '../stores/connectionStore';
 
@@ -26,27 +28,28 @@ export const signIn = async data => {
 				return response;
 			} catch (error) {
 				if (error.errors?.[0]?.extensions?.code === 'USER_SUSPENDED') {
-					throw new Error('USER_SUSPENDED');
+					suspendAlert();
+					return;
 				}
-				throw new Error('Credenciales incorrectas');
+				SignInAlert();
 			}
 		} else {
 			const user = await db.users.get({ email: data.email });
 
 			if (!user) {
-				throw new Error('Credenciales incorrectas o usuario no registrado localmente.');
+				SignInAlert();
 			}
 
 			const passwordMatch = await bcrypt.compare(data.password, user.password);
 			if (!passwordMatch) {
-				throw new Error('Credenciales incorrectas o usuario no registrado localmente.');
+				SignInAlert();
 			}
 
-			localStorage.setItem('localAuth', JSON.stringify({ email: user.email, role: user.role }));
-			return { email: user.email, role: user.role };
+			localStorage.setItem('localAuth', JSON.stringify({ email: user.email }));
+			return { email: user.email };
 		}
 	} catch (error) {
-		console.error('Error en signIn:', error);
+		console.error('Error.....', error);
 		throw error;
 	}
 };

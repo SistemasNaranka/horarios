@@ -27,6 +27,11 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 						tienda: {
 							_eq: location,
 						},
+						empleado: {
+							estado: {
+								_eq: 'Activo',
+							},
+						},
 					},
 					sort: ['id', 'fecha'],
 					limit: -1,
@@ -79,6 +84,11 @@ export const RangeDate = (startDate, endDate, location, page = 1, limit = 10) =>
 						novedad: {
 							_neq: null,
 						},
+						empleado: {
+							estado: {
+								_eq: 'Activo',
+							},
+						},
 					},
 					sort: ['-id', '-fecha'],
 					limit: limit,
@@ -123,6 +133,11 @@ export const allNewsQuery = (page, date, location) => ({
 					},
 					tienda: {
 						_eq: location,
+					},
+					empleado: {
+						estado: {
+							_eq: 'Activo',
+						},
 					},
 				},
 				limit: limitPage,

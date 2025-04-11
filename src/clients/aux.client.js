@@ -10,28 +10,38 @@ import useConnectionStore from '../stores/connectionStore';
 export const roleQuery = () => ({
 	queryKey: ['role'],
 	queryFn: async () => {
-		const { isOnline } = useConnectionStore.getState();
+		try {
+			const onlineResponse = await client.request(
+				readMe({
+					fields: [{ role: ['name', 'id'] }, 'ubicacion'],
+				}),
+			);
 
-		if (isOnline) {
-			const result = await client.request(readMe({ fields: [{ role: ['name'] }, 'ubicacion'] }));
-
-			return result;
-		}
+			if (onlineResponse?.role) {
+				return {
+					role: {
+						name: onlineResponse.role.name,
+						id: onlineResponse.role.id,
+					},
+					ubicacion: onlineResponse.ubicacion,
+				};
+			}
+		} catch (error) {}
 
 		const localAuth = JSON.parse(localStorage.getItem('localAuth'));
-		if (localAuth) {
-			const user = await db.users.get({ email: localAuth.email });
-			if (user) {
-				const role = user.role.name;
-				const ubicacion = user.ubicacion;
+		if (!localAuth) throw new Error('No hay autenticación local');
 
-				return { role: { name: role }, ubicacion };
-			}
-		}
+		const user = await db.users.get({ email: localAuth.email });
+		if (!user) throw new Error('Usuario no encontrado localmente');
+
+		return {
+			role: {
+				name: user.role.name,
+			},
+			ubicacion: user.ubicacion,
+		};
 	},
-	refetchOnWindowFocus: false,
 });
-
 /**
  * Fetch active shifts from the 'turnos' table.
  * @returns {Array} - An array of IDs for active shifts.
@@ -108,8 +118,12 @@ export const employeesLocationQuery = location => ({
 					fields: ['id', 'nombre', 'tienda', 'estado'],
 					sort: 'nombre',
 					filter: {
-						tienda: { _eq: location },
-						estado: { _eq: 'Activo' },
+						tienda: {
+							_eq: location,
+						},
+						estado: {
+							_eq: 'Activo',
+						},
 					},
 				}),
 			);

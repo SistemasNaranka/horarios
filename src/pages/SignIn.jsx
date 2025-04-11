@@ -3,8 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import suspendAlert from '../components/alerts/SuspendAlert';
-import SignInAlert from '../components/alerts/SignInAlert';
+
 import { SignInSchema } from '../schemas/signInSchema';
 import { client, signIn } from '../clients/client';
 import { HOME_PATH } from '../utils/path';
@@ -36,15 +35,6 @@ const SignIn = () => {
 
 			navigate(HOME_PATH);
 		} catch (err) {
-			console.error('Error en onSubmit:', err);
-
-			if (err.message === 'USER_SUSPENDED') {
-				suspendAlert();
-			} else if (err.message.includes('Credenciales incorrectas')) {
-				SignInAlert();
-			} else {
-				SignInAlert();
-			}
 		} finally {
 			setIsLoading(false);
 		}
