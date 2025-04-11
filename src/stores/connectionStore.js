@@ -1,4 +1,3 @@
-// src/stores/connectionStore.js
 import { create } from 'zustand';
 import { client } from '../clients/client';
 

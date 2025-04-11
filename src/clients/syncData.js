@@ -1,5 +1,3 @@
-// src/clients/syncData.js
-
 import { client } from './client';
 import db from '../utils/localDB';
 import { readUsers, readMe, readItems } from '@directus/sdk';
@@ -40,9 +38,6 @@ const getAllEmployees = async () => {
 	return allEmployees;
 };
 
-/**
- * Obtener los registros de los últimos 2 días
- */
 const getRecentRegisters = async tiendaUsuario => {
 	try {
 		const startDate = dayjs().subtract(2, 'day').format('YYYY-MM-DD');
@@ -94,9 +89,6 @@ const getRecentRegisters = async tiendaUsuario => {
 	}
 };
 
-/**
- * Obtener los datos de malla de los próximos 7 días
- */
 const getRecentMesh = async () => {
 	const startDate = dayjs().format('YYYY-MM-DD');
 	const endDate = dayjs().add(7, 'day').format('YYYY-MM-DD');
@@ -179,10 +171,6 @@ export const syncCriticalData = async () => {
 	} catch (error) {}
 };
 
-/**
- * Sincronizar datos desde Directus y guardarlos localmente
- */
-
 const LAST_USER_SYNC_KEY = 'lastUserSync';
 
 export const syncUsers = async () => {
@@ -221,13 +209,12 @@ export const syncUsers = async () => {
 			);
 
 			await db.users.bulkPut(usersWithPassword);
-			localStorage.setItem(LAST_USER_SYNC_KEY, now.toString()); // Guardar la fecha de la última sincronización
-			// console.log('Usuarios sincronizados.');
+			localStorage.setItem(LAST_USER_SYNC_KEY, now.toString());
 		} else {
 		}
 	} catch (error) {}
 };
-// Sincronizar eventos
+
 const syncEvents = async () => {
 	try {
 		const eventos = await client.request(readItems('eventos', { fields: ['id', 'nombre'] }));
@@ -235,7 +222,6 @@ const syncEvents = async () => {
 	} catch (error) {}
 };
 
-// Sincronizar empleados
 const syncEmployees = async () => {
 	try {
 		const empleados = await getAllEmployees();
@@ -243,7 +229,6 @@ const syncEmployees = async () => {
 	} catch (error) {}
 };
 
-// Sincronizar registros
 const syncRegisters = async tiendaUsuario => {
 	try {
 		const registros = await getRecentRegisters(tiendaUsuario);
@@ -252,7 +237,6 @@ const syncRegisters = async tiendaUsuario => {
 	} catch (error) {}
 };
 
-// Sincronizar malla
 const syncMesh = async () => {
 	try {
 		const malla = await getRecentMesh();

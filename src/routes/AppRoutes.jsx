@@ -1,4 +1,3 @@
-// src/routes/AppRoutes.jsx
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoutes from '../components/utils/PrivateRoutes';
 import { HOME_PATH } from '../utils/path';

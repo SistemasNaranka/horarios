@@ -1,5 +1,3 @@
-// src/components/buttons/RegButton.jsx
-
 import StickyNote2Icon from '@mui/icons-material/StickyNote2';
 import { Button, Tooltip, Typography } from '@mui/material';
 import { memo, useState } from 'react';
@@ -24,12 +22,12 @@ const RegButton = ({ disabled, handleNext, text = '', data, employee }) => {
 
 		try {
 			const registerData = isOnline
-				? { evento: text, empleado: employee.id, tienda: location } // Modo online
+				? { evento: text, empleado: employee.id, tienda: location }
 				: {
 						evento: text,
 						empleado: { id: employee.id, nombre: employee.nombre },
 						tienda: location,
-				  }; // Modo offline
+				  };
 
 			const result = await createRegister(registerData);
 
