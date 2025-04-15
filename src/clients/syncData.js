@@ -181,7 +181,7 @@ export const syncUsers = async () => {
 		const lastSync = localStorage.getItem(LAST_USER_SYNC_KEY);
 		const now = new Date().getTime();
 
-		if (isUsersTableEmpty || !lastSync || now - parseInt(lastSync) > 24 * 60 * 60 * 1000) {
+		if (isUsersTableEmpty || !lastSync || now - Number.parseInt(lastSync) > 24 * 60 * 60 * 1000) {
 			const users = await client.request(
 				readUsers({
 					fields: ['email', { role: ['name'] }, 'ubicacion'],

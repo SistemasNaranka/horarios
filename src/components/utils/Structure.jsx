@@ -6,18 +6,16 @@ import { shiftStore } from '../../stores/shiftStore';
 import { roleStore } from '../../stores/roleStore';
 import Loading from './Loading';
 import Header from './Header';
-import useConnectionStore from '../../stores/connectionStore'; // Importar el store de conexión
-
+import useConnectionStore from '../../stores/connectionStore';
 const StructureRoutesCom = lazy(() => import('../../routes/StructureRoutesCom'));
 const StructureRoutes = lazy(() => import('../../routes/StructureRoutes'));
 
 function Structure() {
-	const { isOnline } = useConnectionStore(); // ssObtener el estado de la conexión
+	const { isOnline } = useConnectionStore();
 
-	// Definir las consultas necesarias
-	const queries = [roleQuery(), eventsQuery()]; // Siempre necesitamos role y eventos
+	const queries = [roleQuery(), eventsQuery()];
 	if (isOnline) {
-		queries.push(shiftQuery()); // Solo agregar shiftQuery si estamos en línea
+		queries.push(shiftQuery());
 	}
 
 	const queryResults = useQueries({

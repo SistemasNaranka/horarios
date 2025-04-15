@@ -23,7 +23,9 @@ const AccountMenu = () => {
 	const handleLogOut = async () => {
 		try {
 			if (isOnline) {
-				await client.logout();
+				localStorage.removeItem('storage');
+				remove();
+				navigate('/');
 			}
 
 			localStorage.removeItem('localAuth');

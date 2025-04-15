@@ -6,6 +6,7 @@ import db from '../utils/localDB';
 import suspendAlert from '../components/alerts/SuspendAlert';
 import SignInAlert from '../components/alerts/SignInAlert';
 import bcrypt from 'bcryptjs';
+import UserErroralert from '../components/alerts/UserErrorAlert';
 import useConnectionStore from '../stores/connectionStore';
 
 // Client with REST support and authetication, using local storage for json
@@ -37,12 +38,14 @@ export const signIn = async data => {
 			const user = await db.users.get({ email: data.email });
 
 			if (!user) {
-				SignInAlert();
+				UserErroralert();
+				return;
 			}
 
 			const passwordMatch = await bcrypt.compare(data.password, user.password);
 			if (!passwordMatch) {
 				SignInAlert();
+				return;
 			}
 
 			localStorage.setItem('localAuth', JSON.stringify({ email: user.email }));
