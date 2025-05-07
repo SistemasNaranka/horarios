@@ -1,6 +1,6 @@
 import { useQueries } from '@tanstack/react-query';
 import { lazy, useEffect, useMemo } from 'react';
-import { eventsQuery, roleQuery, shiftQuery } from '../../clients/aux.client';
+import { eventsQuery, roleQuery, shiftQuery } from '../../clients/aux_client';
 import { eventStore } from '../../stores/eventStore';
 import { shiftStore } from '../../stores/shiftStore';
 import { roleStore } from '../../stores/roleStore';

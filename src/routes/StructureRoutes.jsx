@@ -7,7 +7,7 @@ import {
 	CREATE_MESH_RELATIVE,
 	NEWS_RELATIVE,
 } from '../utils/path';
-import { employeesLocationQuery } from '../clients/aux.client';
+import { employeesLocationQuery } from '../clients/aux_client';
 import { employeeStore } from '../stores/employeeStore';
 import Loading from '../components/utils/Loading';
 
