@@ -10,6 +10,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import 'dayjs/locale/es';
 import { registerLocale } from 'react-datepicker';
+import { roleStore } from '../stores/roleStore';
 import es from 'date-fns/locale/es';
 import './utils/styles/custom-datepicker.css';
 import './utils/styles/custom-select.css';
@@ -30,6 +31,7 @@ const History = () => {
 	const [customEndDate, setCustomEndDate] = useState(null);
 	const [isDateRangeCustom, setIsDateRangeCustom] = useState(false);
 
+	const location = roleStore(state => state.location);
 	// Handle date range selection change
 	const handleDateRangeChange = event => {
 		setDateRange(event.target.value);
@@ -126,13 +128,13 @@ const History = () => {
 	const queryResults = useQueries({
 		queries: [
 			{
-				queryKey: ['registerStores', page, startDate, endDate],
-				queryFn: () => allRegistersQuery(page, startDate, endDate).queryFn(),
+				queryKey: ['registerStores', page, startDate, endDate, location],
+				queryFn: () => allRegistersQuery(page, startDate, endDate, location).queryFn(),
 				refetchOnWindowFocus: false,
 			},
 			{
-				queryKey: ['regCount', startDate, endDate],
-				queryFn: () => countRegQuery(startDate, endDate).queryFn(),
+				queryKey: ['regCount', startDate, endDate, location],
+				queryFn: () => countRegQuery(startDate, endDate, location).queryFn(),
 				refetchOnWindowFocus: false,
 			},
 		],

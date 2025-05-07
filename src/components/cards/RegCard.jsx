@@ -120,7 +120,7 @@ const RegCard = ({ data = [], employee, addNews, hasShift = true }) => {
 				/>
 			</div>
 			<hr className=' border-themeGrey/30 border-2' />
-			{!hasShift && (
+			{/* {!hasShift && (
 				<div className='mt-2 text-center'>
 					<div className='flex flex-col items-center justify-center gap-2'>
 						<div className='flex items-center justify-center gap-2'>
@@ -143,7 +143,7 @@ const RegCard = ({ data = [], employee, addNews, hasShift = true }) => {
 						</Link>
 					</div>
 				</div>
-			)}
+			)} */}
 			<div className='flex flex-col justify-center align-middle mt-2 gap-4'>
 				<RegButton
 					employee={employee}

@@ -6,13 +6,20 @@ import { shiftStore } from '../../stores/shiftStore';
 import { roleStore } from '../../stores/roleStore';
 import Loading from './Loading';
 import Header from './Header';
-
+import useConnectionStore from '../../stores/connectionStore';
 const StructureRoutesCom = lazy(() => import('../../routes/StructureRoutesCom'));
 const StructureRoutes = lazy(() => import('../../routes/StructureRoutes'));
 
 function Structure() {
+	const { isOnline } = useConnectionStore();
+
+	const queries = [roleQuery(), eventsQuery()];
+	if (isOnline) {
+		queries.push(shiftQuery());
+	}
+
 	const queryResults = useQueries({
-		queries: [roleQuery(), eventsQuery(), shiftQuery()],
+		queries,
 	});
 
 	const setRole = roleStore(state => state.setRole);
@@ -24,8 +31,8 @@ function Structure() {
 	const isLoading = queryResults.some(query => query.isPending || query.isRefetching);
 
 	const roleData = queryResults[0].data;
-	const shiftsData = queryResults[2].data;
-
+	const eventsData = queryResults[1].data;
+	const shiftsData = isOnline ? queryResults[2]?.data : [];
 	const filteredShifts = useMemo(() => {
 		if (!roleData || !shiftsData) return [];
 
@@ -44,16 +51,20 @@ function Structure() {
 		if (roleData) {
 			setRole(roleData);
 		}
-		if (queryResults[1].data) {
-			setEvents(queryResults[1].data);
+		if (eventsData) {
+			setEvents(eventsData);
 		}
 
-		if (roleData && (roleData.role.name === 'almacenes' || roleData.role.name === 'test')) {
+		if (
+			isOnline &&
+			roleData &&
+			(roleData.role.name === 'almacenes' || roleData.role.name === 'test')
+		) {
 			setShifts(filteredShifts);
-		} else if (shiftsData) {
+		} else if (isOnline && shiftsData) {
 			setShifts(shiftsData);
 		}
-	}, [roleData, queryResults, setRole, setEvents, setShifts, shiftsData, filteredShifts]);
+	}, [roleData, eventsData, shiftsData, setRole, setEvents, setShifts, isOnline, filteredShifts]);
 
 	if (isLoading) return <Loading />;
 

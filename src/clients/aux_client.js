@@ -1,5 +1,7 @@
 import { createItem, readItems, readMe } from '@directus/sdk';
 import { client } from './client';
+import db from '../utils/localDB';
+import useConnectionStore from '../stores/connectionStore';
 
 /**
  *Return role of actual user and loations
@@ -7,10 +9,39 @@ import { client } from './client';
  */
 export const roleQuery = () => ({
 	queryKey: ['role'],
-	queryFn: async () => await client.request(readMe({ fields: [{ role: ['name'] }, 'ubicacion'] })),
-	refetchOnWindowFocus: false,
-});
+	queryFn: async () => {
+		try {
+			const onlineResponse = await client.request(
+				readMe({
+					fields: [{ role: ['name', 'id'] }, 'ubicacion'],
+				}),
+			);
 
+			if (onlineResponse?.role) {
+				return {
+					role: {
+						name: onlineResponse.role.name,
+						id: onlineResponse.role.id,
+					},
+					ubicacion: onlineResponse.ubicacion,
+				};
+			}
+		} catch (error) {}
+
+		const localAuth = JSON.parse(localStorage.getItem('localAuth'));
+		if (!localAuth) throw new Error('No hay autenticación local');
+
+		const user = await db.users.get({ email: localAuth.email });
+		if (!user) throw new Error('Usuario no encontrado localmente');
+
+		return {
+			role: {
+				name: user.role.name,
+			},
+			ubicacion: user.ubicacion,
+		};
+	},
+});
 /**
  * Fetch active shifts from the 'turnos' table.
  * @returns {Array} - An array of IDs for active shifts.
@@ -26,6 +57,7 @@ const getActiveShifts = async () => {
 			},
 		}),
 	);
+
 	return activeShifts.map(shift => shift.id);
 };
 
@@ -36,30 +68,36 @@ const getActiveShifts = async () => {
 export const shiftQuery = () => ({
 	queryKey: ['shifts'],
 	queryFn: async () => {
-		const activeShiftIds = await getActiveShifts();
-		return await client.request(
-			readItems('turnos_ubicaciones', {
-				fields: [
-					'id',
-					{ ubicacion: ['id', 'nombre', 'zona'] },
-					{
-						turno: [
-							'id',
-							'inicio_turno',
-							'final_turno',
-							'tiempo_laborado',
-							'tiempo_almuerzo',
-							'activo',
-						],
+		const { isOnline } = useConnectionStore.getState();
+		if (isOnline) {
+			const activeShiftIds = await getActiveShifts();
+
+			return await client.request(
+				readItems('turnos_ubicaciones', {
+					fields: [
+						'id',
+						{ ubicacion: ['id', 'nombre', 'zona'] },
+						{
+							turno: [
+								'id',
+								'inicio_turno',
+								'final_turno',
+								'tiempo_laborado',
+								'tiempo_almuerzo',
+								'activo',
+							],
+						},
+					],
+					filter: {
+						turno: {
+							_in: activeShiftIds,
+						},
 					},
-				],
-				filter: {
-					turno: {
-						_in: activeShiftIds,
-					},
-				},
-			}),
-		);
+				}),
+			);
+		}
+
+		return [];
 	},
 	refetchOnWindowFocus: false,
 });
@@ -68,23 +106,37 @@ export const shiftQuery = () => ({
  * Return employees in one store
  * @returns
  */
+
 export const employeesLocationQuery = location => ({
-	queryKey: ['employees'],
-	queryFn: async () =>
-		await client.request(
-			readItems('empleados', {
-				fields: ['nombre', 'id'],
-				sort: 'nombre',
-				filter: {
-					tienda: {
-						_eq: location,
+	queryKey: ['employees', location],
+	queryFn: async () => {
+		const { isOnline } = useConnectionStore.getState();
+
+		if (isOnline) {
+			return await client.request(
+				readItems('empleados', {
+					fields: ['id', 'nombre', 'tienda', 'estado'],
+					sort: 'nombre',
+					filter: {
+						tienda: {
+							_eq: location,
+						},
+						estado: {
+							_eq: 'Activo',
+						},
 					},
-					estado: {
-						_eq: 'Activo',
-					},
-				},
-			}),
-		),
+				}),
+			);
+		}
+
+		const empleados = await db.empleados
+			.where('tienda')
+			.equals(location)
+			.and(empleado => empleado.estado === 'Activo')
+			.toArray();
+
+		return empleados;
+	},
 	refetchOnWindowFocus: false,
 	enabled: !!location,
 });
@@ -95,10 +147,17 @@ export const employeesLocationQuery = location => ({
  */
 export const eventsQuery = () => ({
 	queryKey: ['events'],
-	queryFn: async () =>
-		await client.request(readItems('eventos', { fields: ['nombre', 'id'], sort: 'nombre' })),
-});
+	queryFn: async () => {
+		const { isOnline } = useConnectionStore.getState();
+		if (isOnline) {
+			return await client.request(
+				readItems('eventos', { fields: ['nombre', 'id'], sort: 'nombre' }),
+			);
+		}
 
+		return await db.eventos.toArray();
+	},
+});
 export const shopsQuery = () => ({
 	queryKey: ['tiendas'],
 	queryFn: async () =>

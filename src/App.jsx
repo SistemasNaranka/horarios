@@ -10,6 +10,7 @@ import theme from './components/utils/AppTheme';
 import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from './utils/queryClient';
 import Loading from './components/utils/Loading';
+import ConnectionListener from './components/utils/ConnectionListener';
 import { Suspense } from 'react';
 import AppRoutes from './routes/AppRoutes';
 
@@ -22,11 +23,11 @@ function App() {
 				<ThemeProvider theme={theme}>
 					<LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={'es'}>
 						<BrowserRouter>
+							<ConnectionListener />
 							<AppRoutes />
 						</BrowserRouter>
 					</LocalizationProvider>
 				</ThemeProvider>
-
 				<Toaster />
 			</QueryClientProvider>
 		</Suspense>

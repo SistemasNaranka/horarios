@@ -7,35 +7,37 @@ import ReviewDialog from '../dialogs/ReviewDialog';
 import checkErrorAlert from '../alerts/ErrorAlert';
 import { roleStore } from '../../stores/roleStore';
 import successAlert from '../alerts/SuccessAlert';
+import useConnectionStore from '../../stores/connectionStore';
 
-/**
- *
- * @param {Object} props
- * @param {String} props.text
- * @param {Object} props.data
- * @param {Boolean} props.disabled
- * @param {Function} props.handleNext
- * @returns
- */
 const RegButton = ({ disabled, handleNext, text = '', data, employee }) => {
 	const location = roleStore(state => state.location);
 	const [openReviewDialog, setOpenReviewDialog] = useState(false);
 	const [curData, setCurData] = useState(data || {});
 	const [curDisabled, setCurDisabled] = useState(false);
+	const { isOnline } = useConnectionStore();
 
-	const handleClickCheck = () => {
+	const handleClickCheck = async () => {
 		const time = dayjs();
 		setCurDisabled(true);
-		createRegister({ evento: text, empleado: employee.id, tienda: location })
-			.then(res => {
-				successAlert();
-				setCurData({ hora: time.format('h:mm A'), id: res.id });
-				handleNext();
-			})
-			.catch(err => {
-				setCurDisabled(false);
-				checkErrorAlert();
-			});
+
+		try {
+			const registerData = isOnline
+				? { evento: text, empleado: employee.id, tienda: location }
+				: {
+						evento: text,
+						empleado: { id: employee.id, nombre: employee.nombre },
+						tienda: location,
+				  };
+
+			const result = await createRegister(registerData);
+
+			successAlert();
+			setCurData({ hora: time.format('h:mm A'), id: result.id });
+			handleNext();
+		} catch (err) {
+			setCurDisabled(false);
+			checkErrorAlert();
+		}
 	};
 
 	const handleOpenReviewDialog = () => setOpenReviewDialog(true);
