@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import { lazy, useEffect } from 'react';
-import { shopsQuery } from '../clients/aux.client';
+import { shopsQuery } from '../clients/aux_client';
 import { useQueries } from '@tanstack/react-query';
 import { shopStore } from '../stores/shopStore';
 import Loading from '../components/utils/Loading';
