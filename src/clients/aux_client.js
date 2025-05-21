@@ -4,8 +4,10 @@ import db from '../utils/localDB';
 import useConnectionStore from '../stores/connectionStore';
 
 /**
- *Return role of actual user and loations
- * @returns
+ *Funcion para obtener el rol y ubicacion del usuario haciendo una consulta a la base de datos en caso de tener conexión con esta misma o por su defecto
+ * a la base de datos local y mostrando avisos de error en caso de no encontrar el rol o el usuario no este autenticado
+ * @returns {Object} - Un objeto que contiene el rol y la ubicación del usuario
+ * @param {String} role - El rol del usuario
  */
 export const roleQuery = () => ({
 	queryKey: ['role'],
@@ -43,8 +45,8 @@ export const roleQuery = () => ({
 	},
 });
 /**
- * Fetch active shifts from the 'turnos' table.
- * @returns {Array} - An array of IDs for active shifts.
+ * Funcion encargada de obtener los turnos activos de la base de datos  funcion unicamente habilitada en caso de tener conexion con la base de datos principal
+ * @returns {Array} - Un array con los ids de los turnos activos 
  */
 const getActiveShifts = async () => {
 	const activeShifts = await client.request(
@@ -62,9 +64,13 @@ const getActiveShifts = async () => {
 };
 
 /**
- * Fetch shifts and their associated locations, filtered by active shifts.
- * @returns {Array} - An array of shifts with their locations and details.
- */
+ * Funcion encargada de traer los turnos activos de una ubicacion situados en una tabla pivote en caso de tener conexion con la base de datos principal 
+ * atravez de la consulta a la base de datos funcion unicamente habilitada en caso de tener conexion con la base de datos principal 
+ * en caso contrario se devuelve un array vacio
+ * @returns {Array} - Un array con los turnos de la ubicacion 
+ * @param {String} location - El id de la ubicacion
+ * @param {String} activeShiftIds - El id de los turnos activos|
+ *  */
 export const shiftQuery = () => ({
 	queryKey: ['shifts'],
 	queryFn: async () => {
@@ -103,8 +109,10 @@ export const shiftQuery = () => ({
 });
 
 /**
- * Return employees in one store
- * @returns
+ * Funcion usada para traer la informacion de los empleados activos de una ubicacion de la base de datos principal o de la base de datos local
+ * en caso de no tener conexion con la base de datos principal
+ * @returns {Array} - Un array con los empleados de la ubicacion y sus respectivos datos
+ * @param {String} location - El id de la ubicacion
  */
 
 export const employeesLocationQuery = location => ({
@@ -142,8 +150,8 @@ export const employeesLocationQuery = location => ({
 });
 
 /**
- * Get the events
- * @returns
+ * Funcion usada para traer la informacion de los eventos de la base de datos principal o de la base de datos local 
+ * @returns {Array} - Un array con los eventos de la base de datos
  */
 export const eventsQuery = () => ({
 	queryKey: ['events'],
@@ -165,10 +173,10 @@ export const shopsQuery = () => ({
 });
 
 /**
- * Create a new break
- * @param {String} event
- * @param {String} cc
- * @param {String} review
+ * Funcion utilizada por el cliente para crear un evento en la base de datos
+ * @param {String} event - El evento a crear
+ * @param {String} cc - El id del empleado
+ * @param {String} review - La Observaciones del evento (opcional)
  * @returns
  */
 export const createBreak = async (event, cc, review) =>

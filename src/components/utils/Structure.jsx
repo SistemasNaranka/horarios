@@ -5,8 +5,10 @@ import { eventStore } from '../../stores/eventStore';
 import { shiftStore } from '../../stores/shiftStore';
 import { roleStore } from '../../stores/roleStore';
 import Loading from './Loading';
+import InvalidRole from '../../pages/InvalidRole'; // asegúrate de que el path es correcto
 import Header from './Header';
 import useConnectionStore from '../../stores/connectionStore';
+
 const StructureRoutesCom = lazy(() => import('../../routes/StructureRoutesCom'));
 const StructureRoutes = lazy(() => import('../../routes/StructureRoutes'));
 
@@ -39,9 +41,7 @@ function Structure() {
 		const ubicacionUsuario = Number(roleData.ubicacion);
 
 		if (roleData.role.name === 'almacenes' || roleData.role.name === 'test') {
-			return shiftsData.filter(shift => {
-				return Number(shift.ubicacion.id) === ubicacionUsuario;
-			});
+			return shiftsData.filter(shift => Number(shift.ubicacion.id) === ubicacionUsuario);
 		}
 
 		return shiftsData;
@@ -68,15 +68,22 @@ function Structure() {
 
 	if (isLoading) return <Loading />;
 
+	
+	const ValidRoles = ['almacenes', 'test', 'comercial'];
+	if (roleData && !ValidRoles.includes(roleData.role.name)) {
+		return <InvalidRole />;
+	}
+
 	return (
 		<>
 			<Header refetch={refetch} />
-			{roleData.role.name === 'almacenes' || roleData.role.name === 'test' ? (
-				<StructureRoutes location={roleData.ubicacion} />
-			) : (
+			{roleData.role.name === 'comercial' ? (
 				<StructureRoutesCom location={roleData.ubicacion} />
+			) : (
+				<StructureRoutes location={roleData.ubicacion} />
 			)}
 		</>
 	);
 }
+
 export default Structure;

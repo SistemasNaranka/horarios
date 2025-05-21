@@ -7,8 +7,9 @@ import dayjs from 'dayjs';
 const table = 'registros';
 
 /**
- * Get registers in one date for a store
- * @returns
+ * Consulta los registros de una tienda en una fecha específica.ya sea en la base de datos principal o en la base de datos local
+ * @param {String} date - Fecha para filtrar los registros.
+ * @returns {Object} - Registros de la tienda en la fecha especificada.
  */
 export const registersQuery = date => ({
 	queryKey: ['registersStore', date],
@@ -33,12 +34,13 @@ export const registersQuery = date => ({
 	enabled: !!date,
 });
 /**
- * Get all registers in a date range for a store with pagination
- * @param {Number} page
- * @param {String} startDate
- * @param {String} endDate
- * @param {String} location
- * @returns
+ * Traer todos los registros de una tienda en un rango de fechas ya sea en la base de datos principal o en la base de datos local
+ * @param {String} date - Fecha para filtrar los registros.
+ * @param {Number} page - Pagina para paginacion
+ * @param {String} startDate - Fecha de inicio del rango
+ * @param {String} endDate - Fecha de fin del rango
+ * @param {String} location - Id de la ubicacion
+ * @returns {Object} - Registros de la tienda en el rango de fechas especificado.
  */
 export const allRegistersQuery = (page, startDate, endDate, location) => ({
 	queryKey: ['registerStores', page, startDate, endDate],
@@ -79,12 +81,10 @@ export const allRegistersQuery = (page, startDate, endDate, location) => ({
 	refetchOnWindowFocus: false,
 });
 
-/*
- * Create a new register
- * @param {String} event
- * @param {String} cc
- * @param {String} review
- * @returns
+/**
+ * Crea un nuevo registro en la base de datos, ya sea en la base de datos principal o en la base de datos local
+ * @param {Object} data - Datos del registro a crear.
+ * @returns {Object} - El nuevo registro creado.
  */
 
 export const createRegister = async data => {
@@ -117,10 +117,10 @@ export const createRegister = async data => {
 	}
 };
 /**
- * Update a register to add a review
- * @param {String} review
- * @param {Number} id
- * @returns
+ * Actualiza un registro en la base de datos pero solo la observacion dependiendo de si la base de datos es local o principal
+ * @param {String} review - Observaciones a agregar al registro.
+ * @param {String} id - Id del registro a actualizar.
+ * @returns {Object} - El registro actualizado.
  */
 export const createReview = async (review, id) => {
 	const { isOnline } = useConnectionStore.getState();
@@ -152,11 +152,11 @@ export const createReview = async (review, id) => {
 	}
 };
 /**
- * Count the total number of registers for a specific date range and location
- * @param {String} startDate
- * @param {String} endDate
- * @param {String} location
- * @returns
+ * Total de registros en un rango de fechas ya sea en la base de datos principal o en la base de datos local
+ * @param {String} startDate - Fecha de inicio del rango.
+ * @param {String} endDate - Fecha de fin del rango.
+ * @param {String} location - Id de la ubicacion
+ * @returns {Object} - Total de registros en el rango de fechas especificado.
  */
 export const countRegQuery = (startDate, endDate, location) => ({
 	queryKey: ['regCount', startDate, endDate],

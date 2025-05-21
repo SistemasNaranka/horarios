@@ -3,14 +3,17 @@ import { limitPage } from '../utils/constants';
 import { client } from './client';
 import db from '../utils/localDB';
 import useConnectionStore from '../stores/connectionStore';
+
+// Nombre de la tabla en la base de datos
 const mesh = 'malla';
 
 /**
- *
- * @param {String} startDate
- * @param {String} endDate
- * @param {String} location
- * @returns
+ * Funcion para informacion de la tabla malla en un rango de fechas y de los empleados Activos de la base de datos 
+ * en caso de no tener conexion con la base de datos principal se hace la consulta a la base de datos local
+ * @param {String} startDate - Fecha de inicio del rango
+ * @param {String} endDate - Fecha de fin del rango
+ * @param {String} location - Id de la ubicacion
+ * @returns {Object} - Objeto que contiene la informacion de la tabla malla en ese rango de fechas
  */
 export const meshRangeQuery = (startDate, endDate, location) => ({
 	queryKey: ['mesh', location, startDate, endDate],
@@ -50,13 +53,14 @@ export const meshRangeQuery = (startDate, endDate, location) => ({
 });
 
 /**
+ * Genera una configuración para consultar datos filtrados por rango de fechas, ubicación y otros criterios.
  *
- * @param {String} startDate
- * @param {String} endDate
- * @param {String} location
- * @param {Number} page
- * @param {Number} limit
- * @returns
+ * @param {string} startDate - Fecha de inicio del rango.
+ * @param {string} endDate - Fecha de fin del rango.
+ * @param {string} location - Ubicación o tienda para filtrar los datos.
+ * @param {number} [page=1] - Número de página para la paginación.
+ * @param {number} [limit=10] - Límite de elementos por página.
+ * @returns {object} Configuración para la consulta, incluyendo clave, función de consulta y opciones.
  */
 export const RangeDate = (startDate, endDate, location, page = 1, limit = 10) => ({
 	queryKey: ['mesh', location, startDate, endDate, page],
@@ -110,16 +114,14 @@ export const RangeDate = (startDate, endDate, location, page = 1, limit = 10) =>
 	refetchOnWindowFocus: false,
 	enabled: !!location && !!startDate && !!endDate,
 });
+
 /**
- * Get all news for a store
- * @param {Number} page
- * @param {String} date
+ * obtiene todas las novedades de la base de datos
  * @returns
  */
 export const allNewsQuery = (page, date, location) => ({
 	queryKey: ['newsHistory', page, date, location],
 	queryFn: async () => {
-		console.log('all news query  es usado Tabla malla');
 		return await client.request(
 			readItems(mesh, {
 				fields: [{ empleado: ['nombre'] }, 'novedad', 'observaciones', 'fecha', 'empleado'],
@@ -149,8 +151,11 @@ export const allNewsQuery = (page, date, location) => ({
 });
 
 /**
- * @param {String} date
- * @returns number of news
+ * Contar el número de novedades en un rango de fechas y ubicación
+ * @param {string} startDate - Fecha de inicio del rango
+ * @param {string} endDate - Fecha de fin del rango
+ * @param {string} location - Ubicación o tienda para filtrar los datos
+ * @returns {object} Configuración para la consulta, incluyendo clave y función de consulta
  */
 export const countNewsQuery = (startDate, endDate, location) => ({
 	queryKey: ['newsCount', startDate, endDate, location],
@@ -187,6 +192,11 @@ export const countNewsQuery = (startDate, endDate, location) => ({
 	refetchOnWindowFocus: false,
 });
 
+/**
+ * Crea una nueva malla en la base de datos ya sea principal o local
+ * @param {Object} data - Objeto que contiene la informacion de la malla
+ * @returns {Object} - Objeto que contiene la informacion de la malla creada
+ */
 export const createMeshList = async data => {
 	const { isOnline } = useConnectionStore.getState();
 
@@ -223,6 +233,12 @@ export const createMeshList = async data => {
 	}
 };
 
+/**
+ * Actualiza Un registro en la base de datos ya sea principal o local
+ * @param {String} id - Id del Registro a actualizar
+ * @param {Object} data - Objeto que contiene la informacion de la malla
+ * @returns {Object} - Objeto que contiene la informacion de la malla actualizada
+ */
 export const updateMesh = async (id, data) =>
 	await client.request(updateItem(mesh, id, data, { fields: ['id'] }));
 

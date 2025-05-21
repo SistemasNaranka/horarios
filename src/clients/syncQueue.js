@@ -2,6 +2,10 @@ import { client } from './client';
 import db from '../utils/localDB';
 import { createItem, readItems } from '@directus/sdk';
 
+/**
+ * @description Esta funcion se encarga de sincronizar los datos de la base de datos local con la base de datos principal de directus registros que no estan en la base de datos principal
+ * @throws {Error} - Si hay un error al sincronizar los datos
+ */
 export const syncPendingMesh = async () => {
 	try {
 		const pendingMesh = await db.malla.filter(novedad => novedad.syncPending === true).toArray();
@@ -33,6 +37,9 @@ export const syncPendingMesh = async () => {
 	} catch (error) {}
 };
 
+/**
+ * @description Esta funcion se encarga de eliminar novedades que ya han sido sincronizadas
+ */
 const cleanSyncedMesh = async () => {
 	try {
 		const syncedCount = await db.malla.filter(novedad => novedad.syncPending === false).toArray();
@@ -44,6 +51,10 @@ const cleanSyncedMesh = async () => {
 		}
 	} catch (error) {}
 };
+
+/**
+ * @description Esta funcion se encarga de eliminar los registros que ya han sido sincronizados
+ */
 export const deleteSyncedRegisters = async () => {
 	try {
 		const syncedRegisters = await db.registros
@@ -60,11 +71,20 @@ export const deleteSyncedRegisters = async () => {
 	} catch (error) {}
 };
 
+/**
+ * @description Esta funcion se encarga de validar que los registros tengan todos los campos requeridos
+ * @param {Object} registro - Objeto que contiene la informacion del registro
+ * @returns {Boolean} - Retorna true si el registro es valido, false si no lo es
+ */
 const validateRegister = registro => {
 	const requiredFields = ['evento', 'tienda', 'fecha', 'hora'];
 	return requiredFields.every(field => registro[field] != null && registro[field] !== '');
 };
 
+/**
+ * @description Esta funcion se encarga de sincronizar los registros que no han sido sincronizados solo registros que no tienen el campo syncPending en true
+ * @throws {Error} - Si hay un error al sincronizar los registros
+ */
 export const syncPendingRegisters = async () => {
 	try {
 		const pendingRegisters = await db.registros

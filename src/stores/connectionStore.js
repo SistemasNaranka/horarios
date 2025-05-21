@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import { client } from '../clients/client';
 
+/**
+ * @description Esta funcion se encarga de verificar la conexion a la base de datos de directus
+ * @param {boolean} isOnline - Estado de la conexion a la base de datos
+ * @param {boolean} isChecking - Estado de la verificacion de la conexion a la base de datos
+ * @param {function} checkConnectionImmediately - Funcion encargada de verificar la conexion a la base de datos inmediatamente
+ */
 const useConnectionStore = create((set, get) => ({
 	isOnline: false,
 	isChecking: true,

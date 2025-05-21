@@ -9,16 +9,18 @@ import bcrypt from 'bcryptjs';
 import UserErroralert from '../components/alerts/UserErrorAlert';
 import useConnectionStore from '../stores/connectionStore';
 
-// Client with REST support and authetication, using local storage for json
+// Funcion para definir el cliente de directus y la autenticacion guardada en memoria 
 export const client = createDirectus(HOST_ENV)
 	.with(rest())
 	.with(authentication('json', { storage: memoryStorage() }));
 
 /**
- * Sign In
- * @param data The email and password of user
- * @returns Authentication Data
- */
+ * Funcion para inicicar sesion en la aplicacion, si el usuario tiene conexion a internet se hace la autenticacion con la base de datos principal en caso de 
+ * no tener conexion se hace la autenticacion con la base de datos local 
+ * @Error - En caso de que el usuario no exista en la base de datos local o la contraseña no coincida se lanza un error
+ * @param {Object} data - Objeto que contiene el email y la contraseña del usuario
+ * @returns {Object} - Objeto que contiene el email del usuario 
+*/
 export const signIn = async data => {
 	const { isOnline } = useConnectionStore.getState();
 
